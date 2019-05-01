@@ -4,6 +4,7 @@ import Login from '../components/Login';
 import * as loginActions from '../actions/loginActions';
 
 const mapStateToProps = state => ({
+  access_token: state.auth.access_token
 });
 
 const mapDispatchToProps = dispatch => ({

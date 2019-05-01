@@ -1,6 +1,8 @@
 import { AUTHENTICATE_USER_SUCCESS, AUTHENTICATE_USER_FAILURE } from '../actions/loginActions';
 
 const initAuth = {
+  access_token: null,
+  refresh_token: null,
   error: false,
 };
 

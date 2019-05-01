@@ -7,6 +7,12 @@ export default class Login extends React.Component {
     header: null
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.access_token && !prevProps.access_token) {
+      this.props.navigation.navigate('App');
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>

@@ -6,14 +6,16 @@ import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { composeWithDevTools } from 'redux-devtools-extension'
+import AuthLoadingScreen from './containers/AuthLoadingScreenContainer';
 import Login from './containers/LoginContainer';
+import GenreSelect from './components/GenreSelect';
 import museReducer from './reducers/museReducer';
 
 
 const persistConfig = {
-  key: 'root',
+  key: 'root10',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
@@ -21,15 +23,27 @@ const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(
 const persistor = persistStore(store);
 
 
-const RootStack = createStackNavigator({
-  Login
+const AppStack = createStackNavigator({
+  GenreSelect,
 });
-const Navigation = createAppContainer(RootStack);
+const AuthStack = createStackNavigator({
+  Login,
+});
+
+const Navigation = createAppContainer(createSwitchNavigator({
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+));
 
 export default class App extends React.Component {
   renderLoading = () => (
     <View style={styles.container}>
-      <ActivityIndicator size='large'/>
+      <ActivityIndicator size='large' />
     </View>
   )
   render() {
