@@ -10,12 +10,12 @@ import { createStackNavigator, createSwitchNavigator, createAppContainer } from 
 import { composeWithDevTools } from 'redux-devtools-extension'
 import AuthLoadingScreen from './containers/AuthLoadingScreenContainer';
 import Login from './containers/LoginContainer';
-import GenreSelect from './components/GenreSelect';
+import GenreSelect from './containers/GenreSelectContainer';
 import museReducer from './reducers/museReducer';
 
 
 const persistConfig = {
-  key: 'root10',
+  key: 'root14',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
