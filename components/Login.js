@@ -7,15 +7,6 @@ export default class Login extends React.Component {
     header: null
   }
 
-  // logInSpotify = async () => {
-  //   let result = await AuthSession.startAsync({
-  //     authUrl: 'https://lets-get-this-bread.appspot.com/api/login',
-  //   });
-  //   if (result.type !== 'success') {
-  //   } else {
-  //   }
-  // }
-
   render() {
     return (
       <View style={styles.container}>
@@ -27,8 +18,8 @@ export default class Login extends React.Component {
           onPress={this.props.authenticateUser}
         >
           <Text style={styles.loginText}>
-          <FontAwesome name='spotify' size={36}/>
-          {'  '}LOG IN WITH SPOTIFY
+            <FontAwesome name='spotify' size={36} />
+            {'  '}LOG IN WITH SPOTIFY
           </Text>
         </TouchableOpacity>
       </View>
