@@ -1,4 +1,4 @@
-import { AUTHENTICATE_USER_SUCCESS, AUTHENTICATE_USER_FAILURE } from '../actions/loginActions';
+import { AUTHENTICATE_USER_SUCCESS, AUTHENTICATE_USER_FAILURE, SIGN_OUT } from '../actions/loginActions';
 
 const initAuth = {
   access_token: null,
@@ -19,6 +19,8 @@ export default function reducer(state = initAuth, action) {
         ...state,
         error: true,
       };
+    case SIGN_OUT:
+      return initAuth;
     default:
       return state;
   }

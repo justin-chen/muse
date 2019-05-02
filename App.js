@@ -12,11 +12,12 @@ import AuthLoadingScreen from './containers/AuthLoadingScreenContainer';
 import Login from './containers/LoginContainer';
 import GenreSelect from './containers/GenreSelectContainer';
 import Home from './containers/HomeContainer';
+import Profile from './containers/ProfileContainer';
 import museReducer from './reducers/museReducer';
 
 
 const persistConfig = {
-  key: 'root14',
+  key: 'root27',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
@@ -26,6 +27,8 @@ const persistor = persistStore(store);
 
 const AppStack = createStackNavigator({
   Home,
+  Profile,
+  GenreSelect
 });
 const AuthStack = createStackNavigator({
   Login,
@@ -33,7 +36,6 @@ const AuthStack = createStackNavigator({
 
 const Navigation = createAppContainer(createSwitchNavigator({
     AuthLoading: AuthLoadingScreen,
-    OnboardGenreSelect: GenreSelect,
     App: AppStack,
     Auth: AuthStack,
   },

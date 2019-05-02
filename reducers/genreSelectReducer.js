@@ -1,6 +1,6 @@
 import { GENRE_TOGGLE } from '../actions/genreSelectActions';
 
-const initCheckedGenres = {
+const initPreference = {
   pop: false,
   hiphop: false,
   workout: false,
@@ -23,9 +23,9 @@ const initCheckedGenres = {
   punk: false,
   blues: false,
   funk: false,
-};
+}
 
-export default function reducer(state = initCheckedGenres, action) {
+export default function reducer(state = initPreference, action) {
   switch (action.type) {
     case GENRE_TOGGLE:
       state[action.genre] = !state[action.genre];

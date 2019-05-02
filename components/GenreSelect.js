@@ -6,8 +6,20 @@ import Genre from './Genre';
 import genres from '../utils/genres';
 
 export default class GenreSelect extends React.Component {
-  static navigationOptions = {
-    header: null
+  static navigationOptions = ({ navigation }) => {
+    return ({
+      headerStyle: {
+        borderBottomWidth: 0,
+      },
+      headerLeft: (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile')}
+          style={{ marginLeft: 18 }}
+        >
+          <Ionicons name='ios-arrow-back' size={32} />
+        </TouchableOpacity>
+      ),
+    });
   }
 
   renderNextButton = () => (
@@ -20,7 +32,7 @@ export default class GenreSelect extends React.Component {
       </Text>
     </TouchableOpacity>
   )
-
+  
   render() {
     return (
       <View style={styles.container}>
@@ -29,9 +41,9 @@ export default class GenreSelect extends React.Component {
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradient} />
           <FlatList
             data={genres}
-            ListFooterComponent={this.renderNextButton()}
             contentContainerStyle={styles.genreList}
             showsVerticalScrollIndicator={false}
+            extraData={this.props.genres}
             numColumns={2} renderItem={({ item, index }) => {
               return (
                 <Genre item={item} index={index} checked={this.props.genres[item.key]} genreToggle={this.props.genreToggle} />
@@ -52,7 +64,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container: {
-    paddingTop: 75,
+    paddingTop: 24,
   },
   genreList: {
     alignItems: 'center',

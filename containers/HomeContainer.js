@@ -4,6 +4,7 @@ import Home from '../components/Home';
 import * as homeActions from '../actions/homeActions';
 
 const mapStateToProps = state => ({
+  playlists: state.user.playlists
 });
 
 const mapDispatchToProps = dispatch => ({
