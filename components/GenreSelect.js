@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity, View, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import Genre from './Genre';
@@ -13,7 +13,7 @@ export default class GenreSelect extends React.Component {
   renderNextButton = () => (
     <TouchableOpacity
       style={styles.nextButton}
-      onPress={() => { }}
+      onPress={() => { this.props.navigation.navigate('App') }}
     >
       <Text style={styles.nextText}>
         NEXT{'  '}<Ionicons name='ios-arrow-forward' size={24} />
@@ -31,6 +31,7 @@ export default class GenreSelect extends React.Component {
             data={genres}
             ListFooterComponent={this.renderNextButton()}
             contentContainerStyle={styles.genreList}
+            showsVerticalScrollIndicator={false}
             numColumns={2} renderItem={({ item, index }) => {
               return (
                 <Genre item={item} index={index} checked={this.props.genres[item.key]} genreToggle={this.props.genreToggle} />

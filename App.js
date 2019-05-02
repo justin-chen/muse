@@ -11,6 +11,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import AuthLoadingScreen from './containers/AuthLoadingScreenContainer';
 import Login from './containers/LoginContainer';
 import GenreSelect from './containers/GenreSelectContainer';
+import Home from './containers/HomeContainer';
 import museReducer from './reducers/museReducer';
 
 
@@ -24,7 +25,7 @@ const persistor = persistStore(store);
 
 
 const AppStack = createStackNavigator({
-  GenreSelect,
+  Home,
 });
 const AuthStack = createStackNavigator({
   Login,
@@ -32,6 +33,7 @@ const AuthStack = createStackNavigator({
 
 const Navigation = createAppContainer(createSwitchNavigator({
     AuthLoading: AuthLoadingScreen,
+    OnboardGenreSelect: GenreSelect,
     App: AppStack,
     Auth: AuthStack,
   },
