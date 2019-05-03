@@ -1,4 +1,5 @@
 import { STORE_PROFILE, STORE_PLAYLISTS } from '../actions/profileActions';
+import { SIGN_OUT } from '../actions/loginActions';
 
 const initProfile = {
   profile: {},
@@ -27,6 +28,8 @@ export default function reducer(state = initProfile, action) {
         ...state,
         playlists
       };
+    case SIGN_OUT:
+      return initProfile;
     default:
       return state;
   }

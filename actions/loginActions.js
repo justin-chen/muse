@@ -22,7 +22,7 @@ export const authenticateUser = () => async dispatch => {
   } else {
     const accessToken = result.params.access_token;
     const refreshToken = result.params.refresh_token;
-    dispatch(fetchProfile(accessToken));
+    dispatch(fetchProfile(accessToken, refreshToken));
     dispatch(authenticateUserSuccess(accessToken, refreshToken));
   }
 }

@@ -1,4 +1,5 @@
 import { GENRE_TOGGLE } from '../actions/genreSelectActions';
+import { SIGN_OUT } from '../actions/loginActions';
 
 const initPreference = {
   pop: false,
@@ -32,6 +33,8 @@ export default function reducer(state = initPreference, action) {
       return {
         ...state,
       };
+    case SIGN_OUT:
+      return initPreference;
     default:
       return state;
   }

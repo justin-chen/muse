@@ -39,7 +39,7 @@ export default class Home extends React.Component {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
-        <View style={{ height: 500, width: '90%' }}>
+        <View style={{ height: '70%', width: '90%' }}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           <FlatList
             data={this.props.playlists}
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: '#7ae48c',
-    bottom: Dimensions.get('window').width / 4,
+    bottom: Dimensions.get('window').width / 4.3,
     zIndex: 999,
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   oval: {
     position: 'absolute',
-    bottom: -1 * Dimensions.get('window').width * 1.625,
+    bottom: -1 * Dimensions.get('window').width * 1.65,
     width: Dimensions.get('window').width * 2,
     height: Dimensions.get('window').width * 2,
     borderRadius: Dimensions.get('window').width,

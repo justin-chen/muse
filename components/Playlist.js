@@ -7,7 +7,7 @@ export default class Playlist extends React.Component {
       <TouchableOpacity onPress={() => { }} activeOpacity={0.9}>
         <View style={styles.playlist}>
           <Text style={styles.titleText}  numberOfLines={1}>{this.props.name}</Text>
-          <Text style={styles.countText}>{this.props.count} Songs</Text>
+          <Text style={styles.countText}>{this.props.count}{this.props.count === 1 ? ' Song' : ' Songs'}</Text>
           <View style={styles.thumbnail}>
             <Image style={styles.thumbnail} source={{ uri: this.props.thumbnail }} />
           </View>

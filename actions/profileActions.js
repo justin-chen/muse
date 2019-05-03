@@ -1,3 +1,5 @@
+import { fetchAPI } from '../utils/APICaller';
+
 export const STORE_PROFILE = 'STORE_PROFILE';
 export const storeProfile = profile => ({
   type: STORE_PROFILE,
@@ -11,22 +13,22 @@ export const storePlaylists = (playlists, userId) => ({
   userId
 });
 
-export const fetchProfile = accessToken => async dispatch => {
+export const fetchProfile = (accessToken, refreshToken) => async dispatch => {
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },
   };
-  const userData = await fetch('https://api.spotify.com/v1/me', options);
-  const userDataJson = await userData.json();
-  dispatch(fetchPlaylists(accessToken, userDataJson.id))
-  dispatch(storeProfile(userDataJson));
-  return userDataJson;
+  const url = 'https://api.spotify.com/v1/me';
+  const userData = await fetchAPI(url, options, dispatch, refreshToken);
+  dispatch(fetchPlaylists(accessToken, refreshToken, userData.id))
+  dispatch(storeProfile(userData));
+  return userData;
 };
 
-export const fetchPlaylists = (accessToken, userId) => async dispatch => {
+export const fetchPlaylists = (accessToken, refreshToken, userId) => async dispatch => {
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },
   };
-  const playlistData = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=50`, options);
-  const { items: playlists } = await playlistData.json();
+  const url = `https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=50`;
+  const { items: playlists } = await fetchAPI(url, options, dispatch, refreshToken);
   dispatch(storePlaylists(playlists, userId));
 };
