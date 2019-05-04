@@ -50,6 +50,8 @@ export default class Home extends React.Component {
     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
   )
 
+
+
   render() {
     let { fadeAnim } = this.state;
     return (
@@ -80,7 +82,7 @@ export default class Home extends React.Component {
           }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => alert('Let\'s get this bread')}>
+        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => this.props.navigation.navigate('TrackPreview')}>
           <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
         </TouchableOpacity>
         <Text style={styles.start}>START</Text>

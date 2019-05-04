@@ -12,9 +12,10 @@ const fetchAPI = async (url, options, dispatch, refreshToken, n = 5) => {
     if (errorCode == 401) {
       const refreshUrl = `https://lets-get-this-bread.appspot.com/api/refresh_token?refresh_token=${refreshToken}`;
       const refreshResponse = await fetch(refreshUrl);
-      const { access_token } = await refreshResponse.json();
-      await fetchAPI(url, options, dispatch, refreshResponse);
-      dispatch(authenticateUserSuccess(access_token, refreshToken));
+      const { access_token: accessToken } = await refreshResponse.json();
+      options.headers.Authorization = `Bearer ${accessToken}`;
+      dispatch(authenticateUserSuccess(accessToken, refreshToken));
+      return await fetchAPI(url, options, dispatch, refreshResponse);
     }
   }
 };
