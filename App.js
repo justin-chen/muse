@@ -15,7 +15,6 @@ import Home from './containers/HomeContainer';
 import Profile from './containers/ProfileContainer';
 import museReducer from './reducers/museReducer';
 
-
 const persistConfig = {
   key: 'root27',
   storage,

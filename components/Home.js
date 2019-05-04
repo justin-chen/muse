@@ -1,11 +1,18 @@
 import React from 'react';
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
-import { StyleSheet, Text, TouchableOpacity, View, FlatList, Dimensions, Animated } from 'react-native';
+import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, ScrollView, Dimensions, Animated, RefreshControl } from 'react-native';
 import Playlist from './Playlist';
-import EmptyPlaylist from './EmptyPlaylist';
 
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fadeAnim: new Animated.Value(0),
+      refreshing: false,
+    };
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'PLAYLISTS',
@@ -24,10 +31,6 @@ export default class Home extends React.Component {
     };
   };
 
-  state = {
-    fadeAnim: new Animated.Value(0),
-  }
-
   componentDidMount() {
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
@@ -35,27 +38,52 @@ export default class Home extends React.Component {
     }).start();
   }
 
+   _onRefresh = async () => {
+    const { access_token, refresh_token } = this.props.auth;
+    const { id: user_id } = this.props.user.profile;
+    this.setState({ refreshing: true });
+    await this.props.fetchPlaylists(access_token, refresh_token, user_id);
+    this.setState({ refreshing: false });
+  }
+
+  renderRefreshControl = () => (
+    <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
+  )
+
   render() {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
-        <View style={{ height: '70%', width: '90%' }}>
+        <View style={styles.playlistContainer}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
-          <FlatList
-            data={this.props.playlists}
-            contentContainerStyle={styles.playlists}
-            showsVerticalScrollIndicator={false}
-            numColumns={2} renderItem={({ item, index }) => {
-              return (
-                <Playlist item={item} index={index} name={item.name} count={item.trackCount} thumbnail={item.thumbnail}/>
-              )
-            }}>
-          </FlatList>
+          {this.props.playlists.length ?
+            <FlatList
+              data={this.props.playlists}
+              contentContainerStyle={styles.playlists}
+              showsVerticalScrollIndicator={false}
+              refreshControl={this.renderRefreshControl()}
+              numColumns={2} renderItem={({ item, index }) => {
+                return (
+                  <Playlist item={item} index={index} name={item.name} count={item.trackCount} thumbnail={item.thumbnail} />
+                )
+              }}>
+            </FlatList>
+            :
+            <ScrollView
+              contentContainerStyle={styles.playlists}
+              refreshControl={this.renderRefreshControl()}
+            >
+              <Image style={styles.createPlaylist} source={require('../assets/home/playlist.png')} />
+              <Text style={styles.titleText}>CREATE YOUR FIRST PLAYLIST</Text>
+              <Text style={styles.infoText}>Start by tapping the {<MaterialCommunityIcons name='play' size={14} />} button.</Text>
+            </ScrollView>
+          }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
         <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => alert('Let\'s get this bread')}>
           <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
         </TouchableOpacity>
+        <Text style={styles.start}>START</Text>
         <View style={styles.oval} />
       </Animated.View>
     );
@@ -63,6 +91,22 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+  },
+  infoText: {
+    marginTop: 8,
+    fontSize: 14,
+    letterSpacing: 2,
+  },
+  createPlaylist: {
+    width: 240,
+    height: 262,
+    marginTop: 24,
+    marginBottom: 40
+  },
   playlists: {
     paddingTop: 24,
     paddingBottom: 24,
@@ -72,6 +116,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 24,
+  },
+  playlistContainer: {
+    height: '70%',
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  createContainer: {
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   gradientTop: {
     position: 'absolute',
@@ -102,6 +156,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
     shadowOpacity: 0.5,
+  },
+  start: {
+    position: 'absolute',
+    fontSize: 16,
+    letterSpacing: 2,
+    bottom: Dimensions.get('window').width / 7.5,
+    zIndex: 999
   },
   oval: {
     position: 'absolute',
