@@ -38,13 +38,6 @@ export default function reducer(state = initTrackPreview, action) {
         ...state
       };
     case END_SESSION:
-      // clear session, but retain unseen tracks
-      state.session = {};
-      state.added = [];
-      state.seen = {};
-      return {
-        ...state
-      };
     case SIGN_OUT:
       return initTrackPreview;
     default:
