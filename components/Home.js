@@ -1,6 +1,7 @@
 import React from 'react';
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
+import AnimatedLoader from 'react-native-animated-loader';
 import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, ScrollView, Dimensions, Animated, RefreshControl } from 'react-native';
 import Playlist from './Playlist';
 
@@ -10,6 +11,7 @@ export default class Home extends React.Component {
     this.state = {
       fadeAnim: new Animated.Value(0),
       refreshing: false,
+      fetchingTracks: false,
     };
   }
 
@@ -38,7 +40,7 @@ export default class Home extends React.Component {
     }).start();
   }
 
-   _onRefresh = async () => {
+  _onRefresh = async () => {
     const { access_token, refresh_token } = this.props.auth;
     const { id: user_id } = this.props.user.profile;
     this.setState({ refreshing: true });
@@ -50,12 +52,26 @@ export default class Home extends React.Component {
     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
   )
 
-
+  startMuseSession = async () => {
+    const { access_token, refresh_token } = this.props.auth;
+    const categories = this.props.genres;
+    this.setState({ fetchingTracks: true });
+    await this.props.fetchTracks(access_token, refresh_token, categories);
+    this.setState({ fetchingTracks: false })
+    this.props.navigation.navigate('TrackPreview');
+  }
 
   render() {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
+        <AnimatedLoader
+          visible={this.state.fetchingTracks}
+          overlayColor='#fff'
+          animationStyle={styles.lottie}
+          speed={1.5}
+          source={require('../assets/loading.json')}
+        />
         <View style={styles.playlistContainer}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           {this.props.playlists.length ?
@@ -82,7 +98,7 @@ export default class Home extends React.Component {
           }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => this.props.navigation.navigate('TrackPreview')}>
+        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={this.startMuseSession}>
           <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
         </TouchableOpacity>
         <Text style={styles.start}>START</Text>
@@ -93,6 +109,10 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  lottie: {
+    width: 240,
+    height: 240
+  },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -162,7 +182,7 @@ const styles = StyleSheet.create({
   start: {
     position: 'absolute',
     fontSize: 16,
-    letterSpacing: 2,
+    letterSpacing: 1.5,
     bottom: Dimensions.get('window').width / 7.5,
     zIndex: 999
   },

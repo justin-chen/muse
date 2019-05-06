@@ -47,8 +47,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingTop: 16,
     paddingBottom: 16,
-    // paddingLeft: 16,
-    // paddingRight: 16,
     width: Dimensions.get('window').width / 2.5,
     height: Dimensions.get('window').width / 1.9,
   },
@@ -56,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: Dimensions.get('window').width / 2.5,
-    height: Dimensions.get('window').width / 2, // approximate a square
+    height: Dimensions.get('window').width / 2,
   },
   container: {
     flex: 1,

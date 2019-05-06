@@ -13,11 +13,11 @@ import Login from './containers/LoginContainer';
 import GenreSelect from './containers/GenreSelectContainer';
 import Home from './containers/HomeContainer';
 import Profile from './containers/ProfileContainer';
-import TrackPreview from './components/TrackPreview';
+import TrackPreview from './containers/TrackPreviewContainer';
 import museReducer from './reducers/museReducer';
 
 const persistConfig = {
-  key: 'root30',
+  key: 'root36',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
