@@ -98,7 +98,7 @@ export default class Home extends React.Component {
     } else {
       this.props.skipTrack(currentTrackId);
     }
-    if (this.state.sessionCount == 1) {
+    if (this.state.sessionCount <= 1) {
       const { access_token, refresh_token } = this.props.auth;
       const { genres } = this.props;
       this.props.fetchTracks(access_token, refresh_token, genres);
