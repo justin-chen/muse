@@ -1,4 +1,5 @@
 import { STORE_PROFILE, STORE_PLAYLISTS } from '../actions/profileActions';
+import { STORE_PLAYLIST_TRACKS } from '../actions/playlistTracksActions';
 import { SIGN_OUT } from '../actions/loginActions';
 
 const initProfile = {
@@ -20,6 +21,7 @@ export default function reducer(state = initProfile, action) {
           return {
             key: playlist.id,
             name: playlist.name,
+            tracksUrl: playlist.tracks.href,
             trackCount: playlist.tracks.total,
             thumbnail: playlist.images[0].url
           };
@@ -27,6 +29,21 @@ export default function reducer(state = initProfile, action) {
       return {
         ...state,
         playlists
+      };
+    case STORE_PLAYLIST_TRACKS:
+      state.playlists[action.index].tracks = [];
+      action.tracks.forEach(({ track }) => {
+        state.playlists[action.index].tracks.push({
+          key: track.id,
+          track: track.name,
+          album: track.album.name,
+          artists: track.artists.map(({ name }) => name),
+          thumbnail: track.album.images[0].url,
+          preview: track.preview_url
+        })
+      });
+      return {
+        ...state
       };
     case SIGN_OUT:
       return initProfile;

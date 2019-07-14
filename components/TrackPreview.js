@@ -140,9 +140,6 @@ export default class Home extends React.Component {
             <TouchableOpacity style={[styles.button, { borderWidth: 2, borderColor: '#EB4F64', backgroundColor: '#EB4F64' }]} activeOpacity={0.7} onPress={() => this.nextTrack(false)}>
               <AntDesign name='close' size={50} style={[styles.icon, { color: 'white', bottom: 8 }]} />
             </TouchableOpacity>
-            {/* <TouchableOpacity style={[styles.button, { borderWidth: 2, borderColor: '#FBC714' }]} activeOpacity={0.7}>
-              <MaterialCommunityIcons name='playlist-check' size={50} style={[styles.icon, { color: '#FBC714', bottom: 8 }]} />
-            </TouchableOpacity> */}
             <TouchableOpacity style={[styles.button, { borderWidth: 2, borderColor: '#7ae48c', backgroundColor: '#7ae48c' }]} activeOpacity={0.7} onPress={() => this.nextTrack(true)}>
               <Ionicons name='md-heart' size={50} style={[styles.icon, { color: 'white', bottom: 6 }]} />
             </TouchableOpacity>

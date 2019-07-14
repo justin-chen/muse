@@ -13,11 +13,12 @@ import Login from './containers/LoginContainer';
 import GenreSelect from './containers/GenreSelectContainer';
 import Home from './containers/HomeContainer';
 import Profile from './containers/ProfileContainer';
+import PlaylistTracks from './containers/PlaylistTracksContainer';
 import TrackPreview from './containers/TrackPreviewContainer';
 import museReducer from './reducers/museReducer';
 
 const persistConfig = {
-  key: 'root36',
+  key: 'root41',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
@@ -29,6 +30,7 @@ const AppStack = createStackNavigator({
   Home,
   Profile,
   GenreSelect,
+  PlaylistTracks,
   TrackPreview
 });
 const AuthStack = createStackNavigator({

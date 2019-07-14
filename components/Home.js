@@ -1,6 +1,7 @@
 import React from 'react';
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
+import { NavigationEvents } from 'react-navigation';
 import AnimatedLoader from 'react-native-animated-loader';
 import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, ScrollView, Dimensions, Animated, RefreshControl } from 'react-native';
 import Playlist from './Playlist';
@@ -40,12 +41,16 @@ export default class Home extends React.Component {
     }).start();
   }
 
-  _onRefresh = async () => {
+  _onRefresh = async (refresh = true) => {
     const { access_token, refresh_token } = this.props.auth;
     const { id: user_id } = this.props.user.profile;
-    this.setState({ refreshing: true });
-    await this.props.fetchPlaylists(access_token, refresh_token, user_id);
-    this.setState({ refreshing: false });
+    if (refresh) {
+      this.setState({ refreshing: true });
+      await this.props.fetchPlaylists(access_token, refresh_token, user_id);
+      this.setState({ refreshing: false });
+    } else {
+      this.props.fetchPlaylists(access_token, refresh_token, user_id);
+    }
   }
 
   renderRefreshControl = () => (
@@ -61,10 +66,19 @@ export default class Home extends React.Component {
     this.props.navigation.navigate('TrackPreview');
   }
 
+  fetchPlaylistTracks = async params => {
+    const { access_token, refresh_token } = this.props.auth;
+    this.setState({ fetchingPlaylistTracks: true });
+    await this.props.fetchPlaylistTracks(access_token, refresh_token, params);
+    this.setState({ fetchingPlaylistTracks: false })
+    this.props.navigation.navigate('PlaylistTracks', params);
+  }
+
   render() {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
+        <NavigationEvents onWillFocus={() => this._onRefresh(false)} />
         <AnimatedLoader
           visible={this.state.fetchingTracks}
           overlayColor='#fff'
@@ -82,7 +96,15 @@ export default class Home extends React.Component {
               refreshControl={this.renderRefreshControl()}
               numColumns={2} renderItem={({ item, index }) => {
                 return (
-                  <Playlist item={item} index={index} name={item.name} count={item.trackCount} thumbnail={item.thumbnail} />
+                  <Playlist
+                    index={index}
+                    name={item.name}
+                    count={item.trackCount}
+                    url={item.tracksUrl}
+                    thumbnail={item.thumbnail}
+                    navigation={this.props.navigation}
+                    press={this.fetchPlaylistTracks}
+                  />
                 )
               }}>
             </FlatList>
@@ -145,10 +167,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  createContainer: {
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   gradientTop: {
     position: 'absolute',
     left: 0,
@@ -183,7 +201,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 1.5,
+    letterSpacing: 1,
     bottom: Dimensions.get('window').width / 7.5,
     zIndex: 999
   },

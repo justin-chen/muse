@@ -2,9 +2,18 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Image, Text } from 'react-native';
 
 export default class Playlist extends React.Component {
+  viewPlaylistTracks = () => {
+    this.props.press({
+      index: this.props.index,
+      name: this.props.name,
+      thumbnail: this.props.thumbnail,
+      url: this.props.url,
+    }); 
+  }
+
   render() {
     return (
-      <TouchableOpacity onPress={() => { }} activeOpacity={0.9}>
+      <TouchableOpacity onPress={this.viewPlaylistTracks} activeOpacity={0.9}>
         <View style={styles.playlist}>
           <Text style={styles.titleText}  numberOfLines={1}>{this.props.name}</Text>
           <Text style={styles.countText}>{this.props.count}{this.props.count === 1 ? ' Song' : ' Songs'}</Text>
