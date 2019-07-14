@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   start: {
     position: 'absolute',
     fontSize: 16,
+    fontWeight: 'bold',
     letterSpacing: 1.5,
     bottom: Dimensions.get('window').width / 7.5,
     zIndex: 999

@@ -109,8 +109,7 @@ const styles = StyleSheet.create({
     width: '75%'
   },
   signOutButton: {
-    position: 'absolute',
-    bottom: '25%',
+    marginTop: 24,
     paddingTop: 16,
     paddingBottom: 16,
     paddingLeft: 24,
