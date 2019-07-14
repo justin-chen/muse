@@ -7,7 +7,7 @@ const initTrackPreview = {
   seen: {}
 };
 
-export default function reducer(state = initTrackPreview, action) {
+export default function reducer(state = { ...initTrackPreview }, action) {
   const { trackId } = action;
   switch (action.type) {
     case STORE_TRACKS:
@@ -39,7 +39,11 @@ export default function reducer(state = initTrackPreview, action) {
       };
     case END_SESSION:
     case SIGN_OUT:
-      return initTrackPreview;
+      return {
+        session: {},
+        added: [],
+        seen: {}
+      };
     default:
       return state;
   }
