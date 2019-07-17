@@ -31,19 +31,28 @@ export default function reducer(state = initProfile, action) {
         playlists
       };
     case STORE_PLAYLIST_TRACKS:
-      state.playlists[action.index].tracks = [];
-      action.tracks.forEach(({ track }) => {
-        state.playlists[action.index].tracks.push({
-          key: track.id,
-          track: track.name,
-          album: track.album.name,
-          artists: track.artists.map(({ name }) => name),
-          thumbnail: track.album.images[0].url,
-          preview: track.preview_url
-        })
-      });
+      const playlistsUpdated = state.playlists.map((playlist, index) => {
+        if (action.index == index) {
+          return {
+            ...playlist,
+            tracks: action.tracks.map(({ track }) => {
+              return ({
+                key: track.id,
+                track: track.name,
+                album: track.album.name,
+                artists: track.artists.map(({ name }) => name),
+                thumbnail: track.album.images[0].url,
+                preview: track.preview_url
+              })
+            })
+          }
+        }
+        return playlist;
+      })
+      
       return {
-        ...state
+        ...state,
+        playlists: playlistsUpdated
       };
     case SIGN_OUT:
       return initProfile;

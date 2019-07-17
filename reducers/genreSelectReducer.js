@@ -29,9 +29,9 @@ const initPreference = {
 export default function reducer(state = initPreference, action) {
   switch (action.type) {
     case GENRE_TOGGLE:
-      state[action.genre] = !state[action.genre];
       return {
         ...state,
+        [action.genre]: !state[action.genre]
       };
     case SIGN_OUT:
       return initPreference;

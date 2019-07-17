@@ -7,43 +7,43 @@ const initTrackPreview = {
   seen: {}
 };
 
-export default function reducer(state = { ...initTrackPreview }, action) {
+export default function reducer(state = initTrackPreview, action) {
   const { trackId } = action;
+  const { [trackId]: value, ...updatedSession } = state.session;
   switch (action.type) {
     case STORE_TRACKS:
+      const session = {};
       for (let trackId in action.tracks) {
         if (state.seen[trackId] === undefined) {
-          state.session[trackId] = action.tracks[trackId];
+          session[trackId] = action.tracks[trackId];
         }
       }
       return {
-        ...state
+        ...state,
+        session
       };
     case ADD_TRACK:
-      state.session = { ...state.session };
-      state.seen = { ...state.seen };
-      state.added = Array.from(state.added);
-      state.seen[trackId] = null;
-      state.added.push(state.session[trackId]);
-      delete state.session[trackId];
       return {
-        ...state
+        ...state,
+        session: updatedSession,
+        seen: {
+          ...state.seen,
+          [trackId]: "ADD"
+        },
+        added: [...state.added, state.session[trackId]]
       };
     case SKIP_TRACK:
-      state.session = { ...state.session };
-      state.seen = { ...state.seen };
-      state.seen[trackId] = null;
-      delete state.session[trackId];
       return {
-        ...state
+        ...state,
+        session: updatedSession,
+        seen: {
+          ...state.seen,
+          [trackId]: "SKIP"
+        }
       };
     case END_SESSION:
     case SIGN_OUT:
-      return {
-        session: {},
-        added: [],
-        seen: {}
-      };
+      return initTrackPreview;
     default:
       return state;
   }
