@@ -41,7 +41,7 @@ export default function reducer(state = initProfile, action) {
                 track: track.name,
                 album: track.album.name,
                 artists: track.artists.map(({ name }) => name),
-                thumbnail: track.album.images[0].url,
+                thumbnail: track.album.images[track.album.images.length - 1].url,
                 preview: track.preview_url,
                 uri: track.uri
               })

@@ -3,6 +3,7 @@ import { Audio } from 'expo';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
 import { LinearGradient } from 'expo';
 import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, Dimensions, RefreshControl } from 'react-native';
+import AnimatedLoader from 'react-native-animated-loader';
 import Swipeable from 'react-native-swipeable-row';
 
 const soundObject = new Audio.Sound();
@@ -11,6 +12,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      imageCount: 0,
       refreshing: false,
     };
   }
@@ -99,8 +101,15 @@ export default class Home extends React.Component {
     const playlistId = this.props.navigation.getParam('playlistId');
     return (
       <View style={styles.container}>
+        <AnimatedLoader
+          visible={this.state.imageCount <= this.props.tracks.length}
+          overlayColor='#fff'
+          animationStyle={styles.lottie}
+          speed={1.5}
+          source={require('../assets/loading.json')}
+        />
         <View style={styles.artworkContainer}>
-          <Image style={styles.artwork} source={{ uri: thumbnail }} />
+          <Image style={styles.artwork} source={{ uri: thumbnail }} onLoad={() => this.setState({imageCount: this.state.imageCount + 1})} />
         </View>
         <View style={styles.playlistContainer}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
@@ -122,7 +131,7 @@ export default class Home extends React.Component {
                 >
                   <TouchableOpacity activeOpacity={0.9} onPress={() => this.previewTrack(item.preview)}>
                     <View style={styles.track}>
-                      <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+                      <Image style={styles.trackArt} source={{ uri: item.thumbnail }} onLoad={() => this.setState({imageCount: this.state.imageCount + 1})} />
                       <Text
                         numberOfLines={1}
                         style={this.state.trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
@@ -151,6 +160,10 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  lottie: {
+    width: 240,
+    height: 240
+  },
   divider: {
     marginBottom: 0,
     borderBottomColor: 'rgba(128,128,128,0.3)',

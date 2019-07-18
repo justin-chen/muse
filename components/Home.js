@@ -10,6 +10,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      imageCount: 0,
       fadeAnim: new Animated.Value(0),
       refreshing: false,
       fetchingTracks: false,
@@ -33,13 +34,6 @@ export default class Home extends React.Component {
       ),
     };
   };
-
-  componentDidMount() {
-    Animated.timing(this.state.fadeAnim, {
-      toValue: 1,
-      duration: 2000,
-    }).start();
-  }
 
   _onRefresh = async (refresh = true) => {
     const { access_token, refresh_token } = this.props.auth;
@@ -68,10 +62,21 @@ export default class Home extends React.Component {
 
   fetchPlaylistTracks = async params => {
     const { access_token, refresh_token } = this.props.auth;
-    this.setState({ fetchingPlaylistTracks: true });
+    // this.setState({ fetchingPlaylistTracks: true });
     await this.props.fetchPlaylistTracks(access_token, refresh_token, params);
-    this.setState({ fetchingPlaylistTracks: false })
+    // this.setState({ fetchingPlaylistTracks: false })
     this.props.navigation.navigate('PlaylistTracks', params);
+  }
+
+  loaded = () => {
+    this.setState({imageCount: this.state.imageCount + 1}, () => {
+      if (this.state.imageCount  == this.props.playlists.length) {
+        Animated.timing(this.state.fadeAnim, {
+          toValue: 1,
+          duration: 2000,
+        }).start();
+      }
+    })
   }
 
   render() {
@@ -80,7 +85,7 @@ export default class Home extends React.Component {
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
         <NavigationEvents onWillFocus={() => this._onRefresh(false)} />
         <AnimatedLoader
-          visible={this.state.fetchingTracks}
+          visible={this.state.fetchingTracks || this.state.imageCount < this.props.playlists.length}
           overlayColor='#fff'
           animationStyle={styles.lottie}
           speed={1.5}
@@ -105,6 +110,7 @@ export default class Home extends React.Component {
                     thumbnail={item.thumbnail}
                     navigation={this.props.navigation}
                     press={this.fetchPlaylistTracks}
+                    loaded={this.loaded}
                   />
                 )
               }}>
