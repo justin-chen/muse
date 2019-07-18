@@ -10,7 +10,7 @@ const fetchAPI = async (url, options, dispatch, refreshToken, n = 5) => {
   try {
     const response = await fetch(url, options);
     if (response.status === 200) {
-      return await response.json();;
+      return await response.json();
     }
     throw Error(response.status);
   } catch({ message: errorCode }) {

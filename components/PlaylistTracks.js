@@ -1,8 +1,9 @@
 import React from 'react';
 import { Audio } from 'expo';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
 import { LinearGradient } from 'expo';
 import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, Dimensions, RefreshControl } from 'react-native';
+import Swipeable from 'react-native-swipeable-row';
 
 const soundObject = new Audio.Sound();
 
@@ -59,6 +60,12 @@ export default class Home extends React.Component {
     }
   };
 
+  deleteTrack = async (playlistId, trackUri) => {
+    const { access_token, refresh_token } = this.props.auth;
+    await this.props.deleteTrack(access_token, refresh_token, playlistId, trackUri)
+    await this._onRefresh()
+  }
+
   previewTrack = async preview_url => {
     if (!preview_url) {
       alert("No preview available.");
@@ -89,6 +96,7 @@ export default class Home extends React.Component {
 
   render() {
     const thumbnail = this.props.navigation.getParam('thumbnail');
+    const playlistId = this.props.navigation.getParam('playlistId');
     return (
       <View style={styles.container}>
         <View style={styles.artworkContainer}>
@@ -102,24 +110,36 @@ export default class Home extends React.Component {
             showsVerticalScrollIndicator={false}
             refreshControl={this.renderRefreshControl()}
             renderItem={({ item }) => (
-              <TouchableOpacity activeOpacity={0.9} onPress={() => this.previewTrack(item.preview)}>
-                <View style={styles.track}>
-                  <View style={styles.divider} />
-                  <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
-                  <Text
-                    numberOfLines={1}
-                    style={this.state.trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
-                  >
-                    {item.track}
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    style={this.state.trackPlaying == item.preview && item.preview ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
-                  >
-                    {item.artists.join(', ')} - {item.album}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View>
+                <View style={styles.divider} />
+                <Swipeable
+                  rightButtons={[
+                    <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={() => this.deleteTrack(playlistId, item.uri)}>
+                      <AntDesign name='close' size={32} style={{ color: 'red' }} />
+                    </TouchableOpacity>,
+                  ]}
+                  rightButtonWidth={32}
+                >
+                  <TouchableOpacity activeOpacity={0.9} onPress={() => this.previewTrack(item.preview)}>
+                    <View style={styles.track}>
+                      <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+                      <Text
+                        numberOfLines={1}
+                        style={this.state.trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
+                      >
+                        {item.track}
+                      </Text>
+                      <Text
+                        numberOfLines={1}
+                        style={this.state.trackPlaying == item.preview && item.preview ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
+                      >
+                        {item.artists.join(', ')} - {item.album}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </Swipeable>
+              </View>
+
             )}
           >
           </FlatList>
@@ -132,7 +152,7 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   divider: {
-    marginBottom: 12,
+    marginBottom: 0,
     borderBottomColor: 'rgba(128,128,128,0.3)',
     borderBottomWidth: 1,
     width: '100%'
@@ -148,7 +168,7 @@ const styles = StyleSheet.create({
   },
   playlistContainer: {
     height: '60%',
-    width: '85%',
+    width: '80%',
   },
   gradientTop: {
     position: 'absolute',
@@ -178,8 +198,8 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').width / 2
   },
   track: {
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 0,
+    paddingRight: 0,
     height: 72,
   },
   trackName: {
@@ -188,16 +208,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     position: 'absolute',
     marginLeft: 72,
-    marginTop: 16
+    marginTop: 15
   },
   trackArtists: {
     fontSize: 12,
     position: 'absolute',
     marginLeft: 72,
-    marginTop: 40
+    marginTop:  39
   },
   trackArt: {
-    height: 48,
+    marginTop: 12,
+  height: 48,
     width: 48
-  }
+  },
 });

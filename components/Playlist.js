@@ -8,6 +8,7 @@ export default class Playlist extends React.Component {
       name: this.props.name,
       thumbnail: this.props.thumbnail,
       url: this.props.url,
+      playlistId: this.props.playlistId
     }); 
   }
 

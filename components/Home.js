@@ -98,6 +98,7 @@ export default class Home extends React.Component {
                 return (
                   <Playlist
                     index={index}
+                    playlistId={item.key}
                     name={item.name}
                     count={item.trackCount}
                     url={item.tracksUrl}

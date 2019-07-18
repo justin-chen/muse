@@ -42,7 +42,8 @@ export default function reducer(state = initProfile, action) {
                 album: track.album.name,
                 artists: track.artists.map(({ name }) => name),
                 thumbnail: track.album.images[0].url,
-                preview: track.preview_url
+                preview: track.preview_url,
+                uri: track.uri
               })
             })
           }

@@ -18,7 +18,7 @@ import TrackPreview from './containers/TrackPreviewContainer';
 import museReducer from './reducers/museReducer';
 
 const persistConfig = {
-  key: 'root45',
+  key: 'root47',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);

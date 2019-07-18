@@ -14,3 +14,13 @@ export const fetchPlaylistTracks = (accessToken, refreshToken, params) => async 
   const { items: tracks } = await fetchAPI(params.url, options, dispatch, refreshToken);
   dispatch(storePlaylistTracks(tracks, params.index));
 };
+
+export const deleteTrack = (accessToken, refreshToken, playlistId, trackUri) => async dispatch => {
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+  const options = {
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    method: 'DELETE',
+    body: JSON.stringify({tracks: [{uri: trackUri}]}),
+  };
+  await fetchAPI(url, options, dispatch, refreshToken);
+};
