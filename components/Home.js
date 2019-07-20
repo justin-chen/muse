@@ -62,9 +62,7 @@ export default class Home extends React.Component {
 
   fetchPlaylistTracks = async params => {
     const { access_token, refresh_token } = this.props.auth;
-    // this.setState({ fetchingPlaylistTracks: true });
     await this.props.fetchPlaylistTracks(access_token, refresh_token, params);
-    // this.setState({ fetchingPlaylistTracks: false })
     this.props.navigation.navigate('PlaylistTracks', params);
   }
 
@@ -83,7 +81,7 @@ export default class Home extends React.Component {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
-        <NavigationEvents onWillFocus={() => this._onRefresh(false)} />
+        <NavigationEvents onDidFocus={() => this._onRefresh(false)} />
         <AnimatedLoader
           visible={this.state.fetchingTracks || this.state.imageCount < this.props.playlists.length}
           overlayColor='#fff'
