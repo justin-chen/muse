@@ -109,6 +109,7 @@ export default class Home extends React.Component {
                     navigation={this.props.navigation}
                     press={this.fetchPlaylistTracks}
                     loaded={this.loaded}
+                    user={this.props.user}
                   />
                 )
               }}>

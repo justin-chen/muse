@@ -11,7 +11,24 @@ export const fetchPlaylistTracks = (accessToken, refreshToken, params) => async 
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },
   };
-  const { items: tracks } = await fetchAPI(params.url, options, dispatch, refreshToken);
+
+  let tracks = [];
+  let fetchedAll = false;
+  let nextParam = params.url;
+  let res;
+
+  while (true) {
+    res = await fetchAPI(nextParam, options, dispatch, refreshToken);
+
+    tracks.push(...(res.items));
+
+    if (res.next) {
+      nextParam = res.next;
+    } else {
+      break;
+    }
+  }
+
   dispatch(storePlaylistTracks(tracks, params.index));
 };
 

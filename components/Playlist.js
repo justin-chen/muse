@@ -7,7 +7,7 @@ export default class Playlist extends React.Component {
       index: this.props.index,
       name: this.props.name,
       thumbnail: this.props.thumbnail,
-      url: this.props.url,
+      url: this.props.url + `?market=${this.props.user.profile.country}`,
       playlistId: this.props.playlistId
     }); 
   }
