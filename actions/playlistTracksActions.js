@@ -13,7 +13,6 @@ export const fetchPlaylistTracks = (accessToken, refreshToken, params) => async 
   };
 
   let tracks = [];
-  let fetchedAll = false;
   let nextParam = params.url;
   let res;
 
@@ -28,7 +27,6 @@ export const fetchPlaylistTracks = (accessToken, refreshToken, params) => async 
       break;
     }
   }
-
   dispatch(storePlaylistTracks(tracks, params.index));
 };
 

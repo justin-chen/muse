@@ -19,7 +19,7 @@ export default class Playlist extends React.Component {
           <Text style={styles.titleText}  numberOfLines={1}>{this.props.name}</Text>
           <Text style={styles.countText}>{this.props.count}{this.props.count === 1 ? ' Song' : ' Songs'}</Text>
           <View style={styles.thumbnail}>
-            <Image style={styles.thumbnail} source={{ uri: this.props.thumbnail }} onLoad={this.props.loaded}/>
+            <Image style={styles.thumbnail} source={{ uri: this.props.thumbnail }} />
           </View>
         </View>
       </TouchableOpacity>
