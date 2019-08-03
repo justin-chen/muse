@@ -1,4 +1,4 @@
-import { GENRE_TOGGLE } from '../actions/genreSelectActions';
+import { GENRE_TOGGLE, GENRE_SELECT_ALL, GENRE_UNSELECT_ALL } from '../actions/genreSelectActions';
 import { SIGN_OUT } from '../actions/loginActions';
 
 const initPreference = {
@@ -33,8 +33,15 @@ export default function reducer(state = initPreference, action) {
         ...state,
         [action.genre]: !state[action.genre]
       };
+    case GENRE_SELECT_ALL:
+      const genres = { ...initPreference };
+      for (let genre in genres) {
+        genres[genre] = true;
+      }
+      return genres;
+    case GENRE_UNSELECT_ALL:
     case SIGN_OUT:
-      return initPreference;
+      return { ...initPreference };
     default:
       return state;
   }

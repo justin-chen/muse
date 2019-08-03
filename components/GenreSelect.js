@@ -6,7 +6,15 @@ import Genre from './Genre';
 import genres from '../utils/genres';
 
 export default class GenreSelect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectAll: true,
+    };
+  }
+
   static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
     return ({
       headerStyle: {
         borderBottomWidth: 0,
@@ -19,7 +27,30 @@ export default class GenreSelect extends React.Component {
           <Ionicons name='ios-arrow-back' size={32} />
         </TouchableOpacity>
       ),
+      headerRight: (
+        <TouchableOpacity
+          onPress={() => params.genreAll()}
+          style={{ marginRight: 18 }}
+        >
+          <Ionicons name='md-done-all' size={32} />
+        </TouchableOpacity>
+      )
     });
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ 
+      genreAll: this.genreAll
+    });
+  }
+
+  genreAll = () => {
+    if (this.state.selectAll) {
+      this.props.genreSelectAll();
+    } else {
+      this.props.genreUnselectAll();
+    }
+    this.setState({ selectAll: !this.state.selectAll });
   }
 
   renderNextButton = () => (
