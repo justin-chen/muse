@@ -16,6 +16,7 @@ import Profile from './containers/ProfileContainer';
 import PlaylistTracks from './containers/PlaylistTracksContainer';
 import TrackPreview from './containers/TrackPreviewContainer';
 import museReducer from './reducers/museReducer';
+import SessionInitiation from './containers/SessionInitiationContainer';
 
 const persistConfig = {
   key: 'root47',
@@ -31,7 +32,8 @@ const AppStack = createStackNavigator({
   Profile,
   GenreSelect,
   PlaylistTracks,
-  TrackPreview
+  TrackPreview,
+  SessionInitiation
 });
 const AuthStack = createStackNavigator({
   Login,

@@ -40,3 +40,20 @@ export const fetchTracks = (accessToken, refreshToken, categories, limit = 10) =
   const tracks = await fetchAPI(url, options, dispatch, refreshToken);
   dispatch(storeTracks(tracks));
 };
+
+export const fetchPersonalizedTracks = (accessToken, refreshToken, limit = 10) => async dispatch => {
+  const data = {
+    access_token: accessToken,
+    limit
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+  const url = 'https://lets-get-this-bread.appspot.com/api/get_songs_from_user_pref';
+  const tracks = await fetchAPI(url, options, dispatch, refreshToken);
+  dispatch(storeTracks(tracks));
+};
