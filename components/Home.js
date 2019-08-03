@@ -118,7 +118,7 @@ export default class Home extends React.Component {
           }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={this.startMuseSession}>
+        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
           <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
         </TouchableOpacity>
         <Text style={styles.start}>START</Text>
