@@ -21,10 +21,10 @@ export default class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: 'DISCOVER',
+      title: 'Discover',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 2,
+        letterSpacing: 0,
       },
       headerStyle: {
         borderBottomWidth: 0,

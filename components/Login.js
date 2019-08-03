@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 0,
   },
   bodyText: {
-    letterSpacing: 1,
+    letterSpacing: 0,
     lineHeight: 18,
     textAlign: 'center',
     marginTop: 12,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 0,
     color: '#fff',
   },
   container: {

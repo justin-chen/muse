@@ -9,18 +9,18 @@ export default class Playlist extends React.Component {
       thumbnail: this.props.thumbnail,
       url: this.props.url + `?market=${this.props.user.profile.country}`,
       playlistId: this.props.playlistId
-    }); 
+    });
   }
 
   render() {
     return (
       <TouchableOpacity onPress={this.viewPlaylistTracks} activeOpacity={0.9}>
         <View style={styles.playlist}>
-          <Text style={styles.titleText}  numberOfLines={1}>{this.props.name}</Text>
-          <Text style={styles.countText}>{this.props.count}{this.props.count === 1 ? ' Song' : ' Songs'}</Text>
           <View style={styles.thumbnail}>
             <Image style={styles.thumbnail} source={{ uri: this.props.thumbnail }} />
           </View>
+          <Text style={styles.titleText} numberOfLines={1}>{this.props.name}</Text>
+          <Text style={styles.countText}>{this.props.count}{this.props.count === 1 ? ' Song' : ' Songs'}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -31,34 +31,42 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 1,
+    letterSpacing: 0,
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    paddingTop: 2,
+    paddingBottom: 2
   },
   countText: {
     fontSize: 14,
-    letterSpacing: 1,
+    letterSpacing: 0,
   },
   thumbnail: {
-    marginTop: 4,
+    marginBottom: 8,
     width: Dimensions.get('window').width / 3,
     height: Dimensions.get('window').width / 3,
-    shadowOffset: { width: 0, height: 2, },
+    // borderWidth: 0.6,
+    // borderColor: '#C0C0C0'
+    shadowOffset: { width: 0, height: 0, },
     shadowColor: 'grey',
-    shadowOpacity: 0.5,
+    shadowOpacity: 1,
+    shadowRadius: 0.9
   },
   playlist: {
+    backgroundColor: 'white',
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#C0C0C0',
-    borderStyle: 'solid',
+    borderRadius: 10,
     marginLeft: 4,
     marginRight: 4,
     marginBottom: 8,
-    paddingTop: 16,
+    paddingTop: 12,
     paddingBottom: 16,
     width: Dimensions.get('window').width / 2.5,
     height: Dimensions.get('window').width / 1.9,
+    shadowOffset: { width: 0, height: 1, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.5,
+    shadowRadius: 0.85
   },
   genreItem: {
     alignItems: 'center',

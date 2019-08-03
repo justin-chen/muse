@@ -26,16 +26,16 @@ export default class Home extends React.Component {
       title: params.name,
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 2,
+        letterSpacing: 0,
       },
       headerLeft: (
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
           }}
-          style={{ marginLeft: 12 }}
+          style={{ paddingLeft: 12, width: 64 }}
         >
-          <MaterialCommunityIcons name='home-outline' size={26} />
+          <MaterialCommunityIcons name='home-outline' size={30} />
         </TouchableOpacity>
       ),
     };

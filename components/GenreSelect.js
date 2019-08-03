@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import { LinearGradient } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Genre from './Genre';
 import genres from '../utils/genres';
 
@@ -11,17 +11,22 @@ export default class GenreSelect extends React.Component {
     this.state = {
       selectAll: true,
     };
+    this.props.navigation.setParams({ 
+      genreAll: this.genreAll,
+      selectAll: true
+    });
   }
 
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return ({
+      title: 'Categories',
       headerStyle: {
         borderBottomWidth: 0,
       },
       headerLeft: (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() => navigation.navigate('SessionInitiation')}
           style={{ marginLeft: 18 }}
         >
           <Ionicons name='ios-arrow-back' size={32} />
@@ -32,42 +37,28 @@ export default class GenreSelect extends React.Component {
           onPress={() => params.genreAll()}
           style={{ marginRight: 18 }}
         >
-          <Ionicons name='md-done-all' size={32} />
+        { params.selectAll || params.selectAll == undefined ? 
+          <Text>Select All</Text> : <Text>Unselect All</Text>
+        }
         </TouchableOpacity>
       )
-    });
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ 
-      genreAll: this.genreAll
     });
   }
 
   genreAll = () => {
     if (this.state.selectAll) {
       this.props.genreSelectAll();
+      this.props.navigation.setParams({ selectAll: false });
     } else {
       this.props.genreUnselectAll();
+      this.props.navigation.setParams({ selectAll: true });
     }
     this.setState({ selectAll: !this.state.selectAll });
   }
 
-  renderNextButton = () => (
-    <TouchableOpacity
-      style={styles.nextButton}
-      onPress={() => { this.props.navigation.navigate('App') }}
-    >
-      <Text style={styles.nextText}>
-        NEXT{'  '}<Ionicons name='ios-arrow-forward' size={24} />
-      </Text>
-    </TouchableOpacity>
-  )
-  
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.titleText}>WHAT ARE YOU IN THE MOOD FOR?</Text>
         <View style={{ marginTop: 12 }}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradient} />
           <FlatList
@@ -91,7 +82,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 14,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 0,
     textAlign: 'center',
   },
   container: {
@@ -118,7 +109,7 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 0,
     color: '#fff',
   },
   gradient: {

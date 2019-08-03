@@ -17,17 +17,17 @@ export default class Home extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'PLAYLISTS',
+      title: 'Playlists',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 2,
+        letterSpacing: 0,
       },
       headerRight: (
         <TouchableOpacity
           onPress={() => navigation.navigate('Profile')}
-          style={{ marginRight: 12 }}
+          style={{ paddingLeft: 24, width: 64 }}
         >
-          <AntDesign name='user' size={24} />
+          <AntDesign name='user' size={28} />
         </TouchableOpacity>
       ),
     };
@@ -117,12 +117,12 @@ export default class Home extends React.Component {
             </ScrollView>
           }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
+          <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
+            <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
-          <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
-        </TouchableOpacity>
-        <Text style={styles.start}>START</Text>
-        <View style={styles.oval} />
+        {/* <Text style={styles.start}>START</Text>
+        <View style={styles.oval} /> */}
       </Animated.View>
     );
   }
@@ -136,12 +136,12 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 2,
+    letterSpacing: 0,
   },
   infoText: {
     marginTop: 8,
     fontSize: 14,
-    letterSpacing: 2,
+    letterSpacing: 0,
   },
   createPlaylist: {
     width: 240,
@@ -151,16 +151,16 @@ const styles = StyleSheet.create({
   },
   playlists: {
     paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 128,
     alignItems: 'center'
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 24,
+    paddingTop: 12,
   },
   playlistContainer: {
-    height: '70%',
+    height: '90%',
     width: '90%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: 24,
+    height: 12,
     zIndex: 999
   },
   startButton: {
@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: '#7ae48c',
-    bottom: Dimensions.get('window').width / 4.3,
+    right: 14,
+    bottom: 8,
     zIndex: 999,
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 1,
+    letterSpacing: 0,
     bottom: Dimensions.get('window').width / 7.5,
     zIndex: 999
   },

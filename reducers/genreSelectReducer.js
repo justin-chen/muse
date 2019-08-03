@@ -25,13 +25,13 @@ const initPreference = {
   blues: false,
   funk: false,
 }
-
+// numSelected: state.numSelected + (!state[action.genre] ? 1 : -1)
 export default function reducer(state = initPreference, action) {
   switch (action.type) {
     case GENRE_TOGGLE:
       return {
         ...state,
-        [action.genre]: !state[action.genre]
+        [action.genre]: !state[action.genre],
       };
     case GENRE_SELECT_ALL:
       const genres = { ...initPreference };

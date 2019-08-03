@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
     height: 240
   },
   break: {
-    height: 21,
+    height: 36,
   },
   bigBreak: {
-    height: 105,
+    height: 72,
   },
   titleText: {
     fontSize: 19,
