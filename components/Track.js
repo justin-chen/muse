@@ -7,35 +7,38 @@ export default class Track extends React.Component {
   render() {
     const { playlistId, item, trackPlaying } = this.props;
     return (
-      <Swipeable
-        rightButtons={[
-          <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={() => this.props.deleteTrack(playlistId, item.uri)}>
-            <AntDesign name='close' size={32} style={{ color: 'red' }} />
-          </TouchableOpacity>,
-        ]}
-        rightButtonWidth={32}
-      >
+      <View>
         <View style={styles.divider} />
-        <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview)}>
-          <View style={styles.track}>
-            <View style={styles.trackArtWrapper}>
-              <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+        <Swipeable
+          rightButtons={[
+            <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={() => this.props.deleteTrack(playlistId, item.uri)}>
+              <AntDesign name='close' size={32} style={{ color: 'red' }} />
+            </TouchableOpacity>,
+          ]}
+          rightButtonWidth={32}
+        >
+          <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview)}>
+            <View style={styles.track}>
+              <View style={styles.trackArtWrapper}>
+                <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+              </View>
+              <Text
+                numberOfLines={1}
+                style={trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
+              >
+                {item.track}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={trackPlaying == item.preview && item.preview ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
+              >
+                {item.artists.join(', ')} - {item.album}
+              </Text>
             </View>
-            <Text
-              numberOfLines={1}
-              style={trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
-            >
-              {item.track}
-            </Text>
-            <Text
-              numberOfLines={1}
-              style={trackPlaying == item.preview && item.preview ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
-            >
-              {item.artists.join(', ')} - {item.album}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </Swipeable>
+          </TouchableOpacity>
+        </Swipeable>
+        {this.props.lastItem && <View style={styles.divider} />}
+      </View>
     );
   }
 }
@@ -47,6 +50,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%'
   },
+
   track: {
     paddingLeft: 0,
     paddingRight: 0,

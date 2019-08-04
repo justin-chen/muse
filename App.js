@@ -19,7 +19,7 @@ import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
 
 const persistConfig = {
-  key: 'root53',
+  key: 'root54',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);

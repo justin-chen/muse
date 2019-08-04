@@ -1,5 +1,4 @@
 import { STORE_TRACKS, END_SESSION, ADD_TRACK, SKIP_TRACK } from '../actions/trackPreviewActions';
-import { GENRE_TOGGLE, GENRE_SELECT_ALL, GENRE_UNSELECT_ALL } from '../actions/genreSelectActions';
 import { SIGN_OUT } from '../actions/loginActions';
 
 const initTrackPreview = {

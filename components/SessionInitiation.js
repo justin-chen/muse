@@ -30,18 +30,17 @@ export default class SessionInitiation extends React.Component {
     });
   }
 
-  startMuseSession = async (flow) => {
+  startCategorizedMuseSession = async () => {
+    this.props.endSession();
+    this.props.genreUnselectAll();
+    this.props.navigation.navigate('GenreSelect', { header: 'Categories' });
+  }
+
+  startPersonalizedMuseSession = async () => {
     const { access_token, refresh_token } = this.props.auth;
-
     this.setState({ fetchingTracks: true });
-    if (flow === "PERSONALIZED") {
-      await this.props.fetchPersonalizedTracks(access_token, refresh_token);
-    } else {
-      const categories = this.props.genres;
-      await this.props.fetchTracks(access_token, refresh_token, categories);
-    }
+    await this.props.fetchPersonalizedTracks(access_token, refresh_token);
     this.setState({ fetchingTracks: false });
-
     this.props.navigation.navigate('TrackPreview');
   }
 
@@ -60,14 +59,14 @@ export default class SessionInitiation extends React.Component {
 
           <View style={styles.bigBreak} />
 
-          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={() => this.props.navigation.navigate('GenreSelect', { header: 'Categories' })}>
+          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={this.startCategorizedMuseSession}>
             <Text style={styles.buttonTitleText}>Customize My Search</Text>
             <Text style={styles.buttonInfoText}>Pick from the provided categories and we'll find you songs that fit your mood</Text>
           </TouchableOpacity>
 
           <View style={styles.break} />
 
-          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={() => this.startMuseSession("PERSONALIZED")}>
+          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={this.startPersonalizedMuseSession}>
             <Text style={styles.buttonTitleText}>Personalized For Me</Text>
             <Text style={styles.buttonInfoText}>Songs are chosen based on artists and genres that you like on Spotify</Text>
           </TouchableOpacity>

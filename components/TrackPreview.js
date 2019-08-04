@@ -4,7 +4,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import { MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
 
-const soundObject = new Audio.Sound();
+var soundObject = new Audio.Sound();
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -13,10 +13,7 @@ export default class Home extends React.Component {
       currentTrackId: null,
       currentTrackInfo: {},
       sessionCount: 0,
-      addedCount: 0,
-      fetchingTracks: false,
     };
-
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -54,7 +51,7 @@ export default class Home extends React.Component {
     };
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.props.navigation.setParams({ goHome: this.props.endSession });
     this.setState({ sessionCount: Object.keys(this.props.tracks).length });
     Audio.setAudioModeAsync({
@@ -65,44 +62,46 @@ export default class Home extends React.Component {
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       playThroughEarpieceAndroid: true
     });
-    await this.loadTrack();
+    this.loadTrack();
   }
 
-  async componentDidUpdate(prevProps) {
-    const { currentTrackId } = this.state;
+  componentDidUpdate(prevProps) {
+    const { currentTrackId, sessionCount } = this.state;
     const currProps = this.props;
     const nextTrack = !(currentTrackId in currProps.tracks) && (currentTrackId in prevProps.tracks) && Object.keys(currProps.tracks).length;
-    const fetchedTracks = this.state.sessionCount == 0 && Object.keys(currProps.tracks).length;
+    const fetchedTracks = sessionCount == 0 && !Object.keys(prevProps.tracks).length && Object.keys(currProps.tracks).length;
     if (nextTrack) {
-      await this.loadTrack();
+      this.loadTrack();
     } else if (fetchedTracks) {
-      this.setState({ sessionCount: Object.keys(currProps.tracks).length });
-      await this.loadTrack();
+      this.setState({ sessionCount: Object.keys(currProps.tracks).length }, this.loadTrack);
     }
   }
 
   loadTrack = async () => {
     const trackIds = Object.keys(this.props.tracks);
     const trackId = trackIds[trackIds.length * Math.random() << 0];
-    const preview_url = this.props.tracks[trackId].preview_url;
+    const track = this.props.tracks[trackId];
+
+    if (!track) return;
+
+    this.setState({
+      currentTrackId: trackId,
+      currentTrackInfo: track,
+    });
 
     try {
       await soundObject.unloadAsync();
-      await soundObject.loadAsync({ uri: preview_url });
+      await soundObject.loadAsync({ uri: track.preview_url });
       await soundObject.setIsLoopingAsync(true);
       await soundObject.playAsync();
     } catch (error) {
       console.log(error)
     }
-    this.setState({
-      currentTrackId: trackId,
-      currentTrackInfo: this.props.tracks[trackId],
-    });
   }
 
-  nextTrack = async add => {
+  nextTrack = add => {
     const { currentTrackId, sessionCount, lastClicked } = this.state;
-    if (lastClicked && (new Date().getTime() - lastClicked < 1500)) return;
+    if (lastClicked && (new Date().getTime() - lastClicked < 1000)) return;
     this.setState({ sessionCount: sessionCount - 1, lastClicked: new Date().getTime() });
     if (add) {
       this.props.addTrack(currentTrackId);
@@ -112,7 +111,7 @@ export default class Home extends React.Component {
     if (sessionCount <= 1) {
       const { access_token, refresh_token } = this.props.auth;
       const { genres } = this.props;
-      await this.props.fetchTracks(access_token, refresh_token, genres);
+      this.props.fetchTracks(access_token, refresh_token, genres);
     }
   }
 
@@ -151,10 +150,6 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  lottie: {
-    width: 240,
-    height: 240
-  },
   progress: {
     fontWeight: 'bold',
     fontSize: 14,

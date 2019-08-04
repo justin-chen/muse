@@ -5,6 +5,7 @@ import * as homeActions from '../actions/homeActions';
 import * as profileActions from '../actions/profileActions';
 import * as playlistTracksActions from '../actions/playlistTracksActions';
 import * as trackPreviewActions from '../actions/trackPreviewActions';
+import * as genreSelectActions from '../actions/genreSelectActions';
 
 const mapStateToProps = state => ({
   auth: state.auth,
@@ -16,7 +17,8 @@ const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(homeActions, dispatch),
   ...bindActionCreators(profileActions, dispatch),
   ...bindActionCreators(playlistTracksActions, dispatch),
-  ...bindActionCreators(trackPreviewActions, dispatch)
+  ...bindActionCreators(trackPreviewActions, dispatch),
+  ...bindActionCreators(genreSelectActions, dispatch),
 });
 
 const _SessionInitiation = connect(mapStateToProps, mapDispatchToProps)(SessionInitiation);

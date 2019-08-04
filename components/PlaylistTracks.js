@@ -117,13 +117,14 @@ export default class Home extends React.Component {
             contentContainerStyle={styles.playlists}
             showsVerticalScrollIndicator={false}
             refreshControl={this.renderRefreshControl()}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Track
                 item={item}
                 trackPlaying={this.state.trackPlaying}
                 playlistId={playlistId}
                 deleteTrack={this.deleteTrack}
                 previewTrack={this.previewTrack}
+                lastItem={index == this.props.tracks.length - 1}
               >
               </Track>
             )}

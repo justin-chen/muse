@@ -42,7 +42,7 @@ export default class GenreSelect extends React.Component {
       ),
       headerRight: (
         <TouchableOpacity
-          onPress={() => params.genreAll()}
+          onPress={params.genreAll}
           style={{ marginRight: 18 }}
         >
           {params.selectAll || params.selectAll == undefined ?
