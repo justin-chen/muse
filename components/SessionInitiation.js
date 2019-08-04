@@ -1,9 +1,7 @@
 import React from 'react';
-import { LinearGradient } from 'expo';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import AnimatedLoader from 'react-native-animated-loader';
-import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, ScrollView, Dimensions, Animated, RefreshControl } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 
 export default class SessionInitiation extends React.Component {
   constructor(props) {
@@ -20,11 +18,14 @@ export default class SessionInitiation extends React.Component {
       },
       headerLeft: (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
-          style={{ marginLeft: 18 }}
+          onPress={() => {
+            navigation.navigate('Home');
+          }}
+          style={{ paddingLeft: 12, width: 64 }}
         >
-          <Ionicons name='ios-arrow-back' size={36} />
+          <MaterialCommunityIcons name='home-outline' size={30} />
         </TouchableOpacity>
+
       ),
     });
   }
@@ -46,7 +47,7 @@ export default class SessionInitiation extends React.Component {
 
   render() {
     return (
-      <Animated.View style={[{ ...this.props.style}, styles.container]}>
+      <Animated.View style={[{ ...this.props.style }, styles.container]}>
         <AnimatedLoader
           visible={this.state.fetchingTracks}
           overlayColor='#fff'
@@ -57,14 +58,14 @@ export default class SessionInitiation extends React.Component {
         <View style={styles.playlistContainer}>
           <Text style={styles.titleText}>Choose one of two options:</Text>
 
-          <View style={styles.bigBreak}/>
+          <View style={styles.bigBreak} />
 
-          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={() => this.props.navigation.navigate('GenreSelect')}>
+          <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={() => this.props.navigation.navigate('GenreSelect', { header: 'Categories' })}>
             <Text style={styles.buttonTitleText}>Customize My Search</Text>
             <Text style={styles.buttonInfoText}>Pick from the provided categories and we'll find you songs that fit your mood</Text>
           </TouchableOpacity>
 
-          <View style={styles.break}/>
+          <View style={styles.break} />
 
           <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={() => this.startMuseSession("PERSONALIZED")}>
             <Text style={styles.buttonTitleText}>Personalized For Me</Text>
@@ -90,12 +91,10 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 19,
     fontWeight: 'bold',
-    letterSpacing: 2,
   },
   infoText: {
     marginTop: 8,
     fontSize: 14,
-    letterSpacing: 2,
   },
   buttonTitleText: {
     textAlign: 'center',
@@ -120,19 +119,14 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     color: 'white',
     padding: 14,
-    width: 305,
-    height: 88,
+    width: 290,
+    height: 90,
   },
   createPlaylist: {
     width: 240,
     height: 262,
     marginTop: 24,
     marginBottom: 40
-  },
-  playlists: {
-    paddingTop: 24,
-    paddingBottom: 24,
-    alignItems: 'center'
   },
   container: {
     flex: 1,

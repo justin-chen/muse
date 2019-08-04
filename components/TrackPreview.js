@@ -16,6 +16,7 @@ export default class Home extends React.Component {
       addedCount: 0,
       fetchingTracks: false,
     };
+
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -24,7 +25,6 @@ export default class Home extends React.Component {
       title: 'Discover',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 0,
       },
       headerStyle: {
         borderBottomWidth: 0,
@@ -37,17 +37,17 @@ export default class Home extends React.Component {
             soundObject.unloadAsync();
             navigation.navigate('Home');
           }}
-          style={{ marginLeft: 12 }}
+          style={{ paddingLeft: 12, width: 64 }}
         >
-          <MaterialCommunityIcons name='home-outline' size={26} />
+          <MaterialCommunityIcons name='home-outline' size={30} />
         </TouchableOpacity>
       ),
       headerRight: (
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => { }}
           style={{ marginRight: 14 }}
         >
-          <MaterialCommunityIcons name='playlist-check' size={32}  />
+          <MaterialCommunityIcons name='playlist-check' size={32} />
         </TouchableOpacity>
       ),
       gesturesEnabled: false,
@@ -57,28 +57,7 @@ export default class Home extends React.Component {
   async componentDidMount() {
     this.props.navigation.setParams({ goHome: this.props.endSession });
     this.setState({ sessionCount: Object.keys(this.props.tracks).length });
-    // initialize initial track
-    this.loadTrack();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { currentTrackId } = this.state;
-    const currProps = this.props;
-    const nextTrack = !(currentTrackId in currProps.tracks) && (currentTrackId in prevProps.tracks) && Object.keys(currProps.tracks).length;
-    const fetchedTracks = this.state.sessionCount == 0 && Object.keys(currProps.tracks).length;
-    if (nextTrack) {
-      this.loadTrack();
-    } else if (fetchedTracks) {
-      this.setState({ sessionCount: Object.keys(currProps.tracks).length });
-      this.loadTrack();
-    }
-  }
-
-  loadTrack = async () => {
-    const trackIds = Object.keys(this.props.tracks);
-    const trackId = trackIds[trackIds.length * Math.random() << 0];
-    const preview_url = this.props.tracks[trackId].preview_url;
-    await Audio.setAudioModeAsync({
+    Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
@@ -86,43 +65,64 @@ export default class Home extends React.Component {
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
       playThroughEarpieceAndroid: true
     });
+    await this.loadTrack();
+  }
+
+  async componentDidUpdate(prevProps) {
+    const { currentTrackId } = this.state;
+    const currProps = this.props;
+    const nextTrack = !(currentTrackId in currProps.tracks) && (currentTrackId in prevProps.tracks) && Object.keys(currProps.tracks).length;
+    const fetchedTracks = this.state.sessionCount == 0 && Object.keys(currProps.tracks).length;
+    if (nextTrack) {
+      await this.loadTrack();
+    } else if (fetchedTracks) {
+      this.setState({ sessionCount: Object.keys(currProps.tracks).length });
+      await this.loadTrack();
+    }
+  }
+
+  loadTrack = async () => {
+    const trackIds = Object.keys(this.props.tracks);
+    const trackId = trackIds[trackIds.length * Math.random() << 0];
+    const preview_url = this.props.tracks[trackId].preview_url;
+
     try {
+      await soundObject.unloadAsync();
       await soundObject.loadAsync({ uri: preview_url });
-      await soundObject.setIsLoopingAsync(true)
-      soundObject.playAsync();
+      await soundObject.setIsLoopingAsync(true);
+      await soundObject.playAsync();
     } catch (error) {
       console.log(error)
     }
     this.setState({
       currentTrackId: trackId,
-      currentTrackInfo: this.props.tracks[trackId]
+      currentTrackInfo: this.props.tracks[trackId],
     });
   }
 
   nextTrack = async add => {
-    const { currentTrackId, sessionCount } = this.state;
-    soundObject.unloadAsync();
+    const { currentTrackId, sessionCount, lastClicked } = this.state;
+    if (lastClicked && (new Date().getTime() - lastClicked < 1500)) return;
+    this.setState({ sessionCount: sessionCount - 1, lastClicked: new Date().getTime() });
     if (add) {
       this.props.addTrack(currentTrackId);
     } else {
       this.props.skipTrack(currentTrackId);
     }
-    if (this.state.sessionCount <= 1) {
+    if (sessionCount <= 1) {
       const { access_token, refresh_token } = this.props.auth;
       const { genres } = this.props;
-      this.props.fetchTracks(access_token, refresh_token, genres);
+      await this.props.fetchTracks(access_token, refresh_token, genres);
     }
-    this.setState({ sessionCount: sessionCount - 1 });
   }
 
 
   render() {
-    const artworkUrl = this.state.currentTrackInfo.artwork;
+    const track = this.state.currentTrackInfo;
     const count = this.props.added.length;
     return (
-      <ImageBackground style={styles.backgroundArtwork} source={{ uri: artworkUrl }} blurRadius={12}>
+      <ImageBackground style={styles.backgroundArtwork} source={{ uri: track ? track.artwork : null }} blurRadius={12}>
         <View style={styles.container}>
-
           <GestureRecognizer
             onSwipeLeft={() => this.nextTrack(false)}
             onSwipeRight={() => this.nextTrack(true)}
@@ -132,7 +132,7 @@ export default class Home extends React.Component {
             }}
           >
             <View style={styles.artworkContainer}>
-              <Image style={styles.artwork} source={{ uri: artworkUrl }} />
+              <Image style={styles.artwork} source={{ uri:  track ? track.artwork : null }} />
             </View>
           </GestureRecognizer>
           <Text style={styles.progress}>{count.toString(10)}{count == 1 ? ' song ' : ' songs '}added to playlist</Text>
@@ -151,10 +151,13 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  lottie: {
+    width: 240,
+    height: 240
+  },
   progress: {
     fontWeight: 'bold',
     fontSize: 14,
-    letterSpacing: 0.5,
     marginBottom: 48
   },
   icon: {

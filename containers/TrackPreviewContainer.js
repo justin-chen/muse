@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
   tracks: state.tracks.session,
   added: state.tracks.added,
   auth: state.auth,
-  genres: Object.entries(state.genres).filter(genre => genre[1]).map(genre => genre[0]),
+  genres: Object.entries(state.genres).filter(genre => genre[0] != 'genresSelected' && genre[1]).map(genre => genre[0]),
 });
 
 const mapDispatchToProps = dispatch => ({

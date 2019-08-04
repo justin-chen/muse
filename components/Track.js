@@ -18,7 +18,9 @@ export default class Track extends React.Component {
         <View style={styles.divider} />
         <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview)}>
           <View style={styles.track}>
-            <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+            <View style={styles.trackArtWrapper}>
+              <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+            </View>
             <Text
               numberOfLines={1}
               style={trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
@@ -53,20 +55,26 @@ const styles = StyleSheet.create({
   trackName: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0.5,
     position: 'absolute',
-    marginLeft: 72,
+    marginLeft: 64,
     marginTop: 15
   },
   trackArtists: {
     fontSize: 12,
     position: 'absolute',
-    marginLeft: 72,
-    marginTop:  39
+    marginLeft: 64,
+    marginTop: 39
   },
   trackArt: {
-    marginTop: 12,
-  height: 48,
-    width: 48
+    height: 48,
+    width: 48,
   },
+  trackArtWrapper: {
+    marginTop: 12,
+    marginLeft: 2,
+    shadowOffset: { width: 0, height: 0, },
+    shadowColor: 'grey',
+    shadowOpacity: 1,
+    shadowRadius: 0.8
+  }
 });

@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
     paddingLeft: 12,
     paddingRight: 12,
     paddingTop: 2,
@@ -39,14 +38,11 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 14,
-    letterSpacing: 0,
   },
   thumbnail: {
     marginBottom: 8,
     width: Dimensions.get('window').width / 3,
     height: Dimensions.get('window').width / 3,
-    // borderWidth: 0.6,
-    // borderColor: '#C0C0C0'
     shadowOffset: { width: 0, height: 0, },
     shadowColor: 'grey',
     shadowOpacity: 1,
@@ -63,10 +59,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     width: Dimensions.get('window').width / 2.5,
     height: Dimensions.get('window').width / 1.9,
-    shadowOffset: { width: 0, height: 1, },
+    shadowOffset: { width: 0, height: 0.4, },
     shadowColor: 'grey',
     shadowOpacity: 0.5,
-    shadowRadius: 0.85
+    shadowRadius: 0.9
   },
   genreItem: {
     alignItems: 'center',

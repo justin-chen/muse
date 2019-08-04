@@ -5,8 +5,9 @@ import { StyleSheet, Text, Image, TouchableOpacity, View, Dimensions } from 'rea
 export default class Genre extends React.Component {
   render() {
     return (
-      <TouchableOpacity onPress={() => { this.props.genreToggle(this.props.item.key) }} activeOpacity={0.9}>
+      <TouchableOpacity onPress={() => { this.props.genreToggle(this.props.item.key, !this.props.checked) }} activeOpacity={0.9}>
         <View style={styles.genreItem}>
+          {this.props.checked && <View style={styles.genreOverlay} />}
           <View style={styles.genreTitleView}>
             <Text style={styles.genreText}>{this.props.item.name}</Text>
           </View>
@@ -31,6 +32,13 @@ const styles = StyleSheet.create({
     zIndex: 999,
     position: 'absolute',
     top: Dimensions.get('window').width / 3.5
+  },
+  genreOverlay: {
+    position: 'absolute',
+    zIndex: 999,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    width: '100%',
+    height: '100%',
   },
   genreItem: {
     alignItems: 'center',

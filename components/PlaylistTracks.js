@@ -26,7 +26,6 @@ export default class Home extends React.Component {
       title: params.name,
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 0,
       },
       headerLeft: (
         <TouchableOpacity

@@ -25,7 +25,7 @@ export default class Login extends React.Component {
         >
           <Text style={styles.loginText}>
             <FontAwesome name='spotify' size={36} />
-            {'  '}LOG IN WITH SPOTIFY
+            {'   '}LOG IN WITH SPOTIFY
           </Text>
         </TouchableOpacity>
       </View>
@@ -42,10 +42,8 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
   },
   bodyText: {
-    letterSpacing: 0,
     lineHeight: 18,
     textAlign: 'center',
     marginTop: 12,
@@ -67,7 +65,6 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
     color: '#fff',
   },
   container: {

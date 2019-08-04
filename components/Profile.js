@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ionicons, FontAwesome, Feather } from '@expo/vector-icons'
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 
 export default class Profile extends React.Component {
@@ -8,14 +8,15 @@ export default class Profile extends React.Component {
       title: 'Profile',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 0,
       },
       headerLeft: (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
-          style={{ width: 64, paddingLeft: 18 }}
+          onPress={() => {
+            navigation.navigate('Home');
+          }}
+          style={{ paddingLeft: 12, width: 64 }}
         >
-          <Ionicons name='ios-arrow-back' size={32} />
+          <MaterialCommunityIcons name='home-outline' size={30} />
         </TouchableOpacity>
       ),
     };
@@ -37,17 +38,7 @@ export default class Profile extends React.Component {
         <Text style={styles.titleText}>Email</Text>
         <Text style={styles.infoText} numberOfLines={1}>{this.props.profile.email}</Text>
         <View style={styles.divider} />
-        
-        {/* <TouchableOpacity style={{width: '75%'}} activeOpacity={0.6} onPress={() => this.props.navigation.navigate('GenreSelect')}>
-          <Text style={styles.titleText}>Genre Preferences</Text>
-          <Text style={styles.genreText} numberOfLines={2}>
-            {
-              this.props.genres.length ? this.props.genres.join(', ') : 'None'
-            }
-          </Text>
-          <Feather name='edit' size={24} style={styles.editGenres}/>
-        </TouchableOpacity>
-        <View style={styles.divider} /> */}
+
         <TouchableOpacity style={styles.signOutButton} onPress={() => {
           this.props.signOut();
           this.props.navigation.navigate('Auth');
@@ -80,21 +71,18 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
   },
   infoText: {
     marginTop: 4,
     width: '75%',
     textAlign: 'left',
     fontSize: 14,
-    letterSpacing: 0,
   },
   genreText: {
     marginTop: 4,
     paddingRight: '15%',
     textAlign: 'left',
     fontSize: 14,
-    letterSpacing: 0,
   },
   container: {
     flex: 1,
@@ -121,7 +109,6 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
     color: '#fff',
   },
 });

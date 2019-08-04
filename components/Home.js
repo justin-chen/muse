@@ -20,7 +20,6 @@ export default class Home extends React.Component {
       title: 'Playlists',
       headerTitleStyle: {
         fontWeight: 'bold',
-        letterSpacing: 0,
       },
       headerRight: (
         <TouchableOpacity
@@ -55,15 +54,6 @@ export default class Home extends React.Component {
   renderRefreshControl = () => (
     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
   )
-
-  startMuseSession = async () => {
-    const { access_token, refresh_token } = this.props.auth;
-    const categories = this.props.genres;
-    this.setState({ fetchingTracks: true });
-    await this.props.fetchTracks(access_token, refresh_token, categories);
-    this.setState({ fetchingTracks: false })
-    this.props.navigation.navigate('TrackPreview');
-  }
 
   fetchPlaylistTracks = async params => {
     const { access_token, refresh_token } = this.props.auth;
@@ -117,12 +107,10 @@ export default class Home extends React.Component {
             </ScrollView>
           }
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
-          <TouchableOpacity style={styles.startButton} activeOpacity={0.9} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
+          <TouchableOpacity style={styles.startButton} activeOpacity={0.95} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
             <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
           </TouchableOpacity>
         </View>
-        {/* <Text style={styles.start}>START</Text>
-        <View style={styles.oval} /> */}
       </Animated.View>
     );
   }
@@ -136,12 +124,10 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 0,
   },
   infoText: {
     marginTop: 8,
     fontSize: 14,
-    letterSpacing: 0,
   },
   createPlaylist: {
     width: 240,
@@ -150,14 +136,14 @@ const styles = StyleSheet.create({
     marginBottom: 40
   },
   playlists: {
-    paddingTop: 24,
+    paddingTop: 12,
     paddingBottom: 128,
     alignItems: 'center'
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 12,
+    marginTop: 24,
   },
   playlistContainer: {
     height: '90%',
@@ -170,7 +156,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 24,
+    height: 12,
     zIndex: 999
   },
   gradientBottom: {
@@ -195,23 +181,5 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
     shadowOpacity: 0.5,
-  },
-  start: {
-    position: 'absolute',
-    fontSize: 16,
-    fontWeight: 'bold',
-    letterSpacing: 0,
-    bottom: Dimensions.get('window').width / 7.5,
-    zIndex: 999
-  },
-  oval: {
-    position: 'absolute',
-    bottom: -1 * Dimensions.get('window').width * 1.65,
-    width: Dimensions.get('window').width * 2,
-    height: Dimensions.get('window').width * 2,
-    borderRadius: Dimensions.get('window').width,
-    borderWidth: 0.5,
-    borderColor: 'rgba(128,128,128,0.1)',
-    backgroundColor: 'rgba(245,245,245,0.5)',
   },
 });
