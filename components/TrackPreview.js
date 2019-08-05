@@ -1,10 +1,12 @@
 import React from 'react';
 import { Audio } from 'expo';
 import GestureRecognizer from 'react-native-swipe-gestures';
+import { NavigationEvents } from 'react-navigation';
 import { MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
 
-var soundObject = new Audio.Sound();
+const PLACEHOLDER = 'https://via.placeholder.com/650/8BE79A/ffffff?text=Muse';
+const soundObject = new Audio.Sound();
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -23,9 +25,6 @@ export default class Home extends React.Component {
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      headerStyle: {
-        borderBottomWidth: 0,
-      },
       headerTransparent: true,
       headerLeft: (
         <TouchableOpacity
@@ -41,8 +40,8 @@ export default class Home extends React.Component {
       ),
       headerRight: (
         <TouchableOpacity
-          onPress={() => { }}
-          style={{ marginRight: 14 }}
+          onPress={params.goPreview}
+          style={{ paddingLeft: 16, width: 64 }}
         >
           <MaterialCommunityIcons name='playlist-check' size={32} />
         </TouchableOpacity>
@@ -51,8 +50,12 @@ export default class Home extends React.Component {
     };
   };
 
+  componentWillUnmount() {
+    soundObject.unloadAsync();
+  }
+
   componentDidMount() {
-    this.props.navigation.setParams({ goHome: this.props.endSession });
+    this.props.navigation.setParams({ goHome: this.props.endSession, goPreview: this.goPreview });
     this.setState({ sessionCount: Object.keys(this.props.tracks).length });
     Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
@@ -77,6 +80,15 @@ export default class Home extends React.Component {
     }
   }
 
+  goPreview = () => {
+    if (!this.props.added.length) {
+      alert('No songs added to playlist builder.');
+    } else {
+      soundObject.stopAsync();
+      this.props.navigation.navigate('PlaylistPreview', { added: this.props.added });
+    }
+  }
+
   loadTrack = async () => {
     const trackIds = Object.keys(this.props.tracks);
     const trackId = trackIds[trackIds.length * Math.random() << 0];
@@ -94,6 +106,18 @@ export default class Home extends React.Component {
       await soundObject.loadAsync({ uri: track.preview_url });
       await soundObject.setIsLoopingAsync(true);
       await soundObject.playAsync();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  resumeTrack = async () => {
+    const status = await soundObject.getStatusAsync();
+    try {
+      if (status.isLoaded && !status.isPlaying) {
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      }
     } catch (error) {
       console.log(error)
     }
@@ -120,7 +144,10 @@ export default class Home extends React.Component {
     const track = this.state.currentTrackInfo;
     const count = this.props.added.length;
     return (
-      <ImageBackground style={styles.backgroundArtwork} source={{ uri: track ? track.artwork : null }} blurRadius={12}>
+      <ImageBackground style={styles.backgroundArtwork} source={{ uri: track.artwork ? track.artwork[0] : PLACEHOLDER }} blurRadius={12}>
+        <NavigationEvents
+          onWillFocus={this.resumeTrack}
+        />
         <View style={styles.container}>
           <GestureRecognizer
             onSwipeLeft={() => this.nextTrack(false)}
@@ -131,7 +158,7 @@ export default class Home extends React.Component {
             }}
           >
             <View style={styles.artworkContainer}>
-              <Image style={styles.artwork} source={{ uri:  track ? track.artwork : null }} />
+              <Image style={styles.artwork} source={{ uri:  track.artwork ? track.artwork[0] : PLACEHOLDER }} />
             </View>
           </GestureRecognizer>
           <Text style={styles.progress}>{count.toString(10)}{count == 1 ? ' song ' : ' songs '}added to playlist</Text>

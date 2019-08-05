@@ -38,11 +38,11 @@ export default function reducer(state = initProfile, action) {
             tracks: action.tracks.map(({ track }) => {
               return ({
                 key: track.id,
-                track: track.name,
+                name: track.name,
                 album: track.album.name,
                 artists: track.artists.map(({ name }) => name),
-                thumbnail: track.album.images[track.album.images.length - 1].url,
-                preview: track.preview_url,
+                artwork: track.album.images.map(image => image.url),
+                preview_url: track.preview_url,
                 uri: track.uri
               })
             })

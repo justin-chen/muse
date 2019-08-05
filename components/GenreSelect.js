@@ -63,10 +63,11 @@ export default class GenreSelect extends React.Component {
   }
 
   genreToggle = (genre, selected) => {
+    const { genresSelected } = this.props;
     if (selected) {
-      this.props.navigation.setParams({ header: `${this.props.genresSelected + 1} Selected`, selectAll: (this.props.genresSelected + 1) < 22 });
+      this.props.navigation.setParams({ header: `${genresSelected + 1} Selected`, selectAll: (genresSelected + 1) < 22 });
     } else {
-      this.props.navigation.setParams({ header: this.props.genresSelected == 1 ? 'Categories' : `${this.props.genresSelected - 1} Selected`, selectAll: true });
+      this.props.navigation.setParams({ header: genresSelected == 1 ? 'Categories' : `${genresSelected - 1} Selected`, selectAll: true });
     }
     this.props.genreToggle(genre);
   }

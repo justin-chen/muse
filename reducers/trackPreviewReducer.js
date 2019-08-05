@@ -30,7 +30,7 @@ export default function reducer(state = initTrackPreview, action) {
           ...state.seen,
           [trackId]: "ADD"
         },
-        added: [...state.added, state.session[trackId]]
+        added: [...state.added, { ...state.session[trackId], key: trackId }]
       };
     case SKIP_TRACK:
       return {

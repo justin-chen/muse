@@ -4,33 +4,44 @@ import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-swipeable-row';
 
 export default class Track extends React.Component {
+
+  deleteTrack = async () => {
+    const { playlistId, item } = this.props;
+    if (playlistId) {
+      this.props.deleteTrack(playlistId, item.uri, item.preview_url);
+    } else {
+
+    }
+  }
+
   render() {
-    const { playlistId, item, trackPlaying } = this.props;
+    const { item, trackPlaying } = this.props;
+    console.log(`${trackPlaying} render`);
     return (
       <View>
         <View style={styles.divider} />
         <Swipeable
           rightButtons={[
-            <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={() => this.props.deleteTrack(playlistId, item.uri)}>
+            <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={this.deleteTrack}>
               <AntDesign name='close' size={32} style={{ color: 'red' }} />
             </TouchableOpacity>,
           ]}
           rightButtonWidth={32}
         >
-          <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview)}>
+          <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview_url)}>
             <View style={styles.track}>
               <View style={styles.trackArtWrapper}>
-                <Image style={styles.trackArt} source={{ uri: item.thumbnail }} />
+                <Image style={styles.trackArt} source={{ uri: item.artwork[item.artwork.length - 1] }} />
               </View>
               <Text
                 numberOfLines={1}
-                style={trackPlaying == item.preview && item.preview ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
+                style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
               >
-                {item.track}
+                {item.name}
               </Text>
               <Text
                 numberOfLines={1}
-                style={trackPlaying == item.preview && item.preview ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
+                style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
               >
                 {item.artists.join(', ')} - {item.album}
               </Text>
