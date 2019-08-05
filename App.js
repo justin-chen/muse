@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -18,7 +18,6 @@ import TrackPreview from './containers/TrackPreviewContainer';
 import PlaylistPreview from './containers/PlaylistPreviewContainer';
 import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
-GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
