@@ -88,12 +88,7 @@ export default class SessionInitiation extends React.Component {
           animationStyle={styles.lottie}
           speed={1.5}
           source={require('../assets/loading.json')}
-        >
-          <View style={styles.newUserSyncText}>
-            <Text style={styles.infoText}>We're gathering your song preferences based on your listening history on Spotify. This may take a little while...</Text>
-          </View>
-        </AnimatedLoader>
-
+        />
         <AnimatedLoader
           visible={this.state.fetchingTracks}
           overlayColor='#fff'

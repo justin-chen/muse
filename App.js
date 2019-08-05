@@ -18,9 +18,10 @@ import TrackPreview from './containers/TrackPreviewContainer';
 import PlaylistPreview from './containers/PlaylistPreviewContainer';
 import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 const persistConfig = {
-  key: 'root56',
+  key: 'root57',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
