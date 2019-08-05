@@ -24,6 +24,7 @@ export const fetchProfile = (accessToken, refreshToken) => async dispatch => {
   return userData;
 };
 
+// Probably needs to handle the case where there are more than 50 playlists. Need to loop
 export const fetchPlaylists = (accessToken, refreshToken, userId) => async dispatch => {
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },

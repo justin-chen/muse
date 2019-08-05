@@ -59,7 +59,7 @@ export default class GenreSelect extends React.Component {
     this.setState({ fetchingTracks: true });
     await this.props.fetchTracks(access_token, refresh_token, categories);
     this.setState({ fetchingTracks: false })
-    this.props.navigation.navigate('TrackPreview');
+    this.props.navigation.navigate('TrackPreview', {personalized: false, categories: true});
   }
 
   genreToggle = (genre, selected) => {
