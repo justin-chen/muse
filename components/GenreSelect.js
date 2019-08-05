@@ -45,7 +45,7 @@ export default class GenreSelect extends React.Component {
           onPress={params.genreAll}
           style={{ marginRight: 20 }}
         >
-          <Text> {params.selectAll || params.selectAll == undefined ? 'Select All' : 'Unselect All'  }</Text>
+          <Text> {params.selectAll || params.selectAll == undefined ? 'Select All' : 'Unselect All'}</Text>
         </TouchableOpacity>
       )
     });
@@ -57,7 +57,7 @@ export default class GenreSelect extends React.Component {
     this.setState({ fetchingTracks: true });
     await this.props.fetchTracks(access_token, refresh_token, categories);
     this.setState({ fetchingTracks: false })
-    this.props.navigation.navigate('TrackPreview', {personalized: false, categories: true});
+    this.props.navigation.navigate('TrackPreview', { personalized: false, categories: true });
   }
 
   genreToggle = (genre, selected) => {
@@ -83,30 +83,33 @@ export default class GenreSelect extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <AnimatedLoader
-          visible={this.state.fetchingTracks}
-          overlayColor='#fff'
-          animationStyle={styles.lottie}
-          speed={1.5}
-          source={require('../assets/loading.json')}
-        />
-        <LinearGradient colors={['white', '#ffffff00']} style={styles.gradient} />
-        <FlatList
-          data={genres}
-          contentContainerStyle={styles.genreList}
-          showsVerticalScrollIndicator={false}
-          extraData={this.props.genres}
-          numColumns={2} renderItem={({ item, index }) => {
-            return (
-              <Genre item={item} index={index} checked={this.props.genres[item.key]} genreToggle={this.genreToggle} />
-            )
-          }}>
-        </FlatList>
-        <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
-        <TouchableOpacity style={styles.startButton} activeOpacity={0.95} onPress={this.startMuseSession}>
-          <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
+        <View style={styles.genresContainer}>
+          <AnimatedLoader
+            visible={this.state.fetchingTracks}
+            overlayColor='#fff'
+            animationStyle={styles.lottie}
+            speed={1.5}
+            source={require('../assets/loading.json')}
+          />
+          <LinearGradient colors={['white', '#ffffff00']} style={styles.gradient} />
+          <FlatList
+            data={genres}
+            contentContainerStyle={styles.genreList}
+            showsVerticalScrollIndicator={false}
+            extraData={this.props.genres}
+            numColumns={2} renderItem={({ item, index }) => {
+              return (
+                <Genre item={item} index={index} checked={this.props.genres[item.key]} genreToggle={this.genreToggle} />
+              )
+            }}>
+          </FlatList>
+          <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
+        </View>
+        <TouchableOpacity style={styles.nextButton} activeOpacity={0.95} onPress={this.startMuseSession}>
+          <Text style={styles.nextText}>NEXT</Text>
         </TouchableOpacity>
       </View>
+
     );
   }
 }
@@ -122,31 +125,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  genresContainer: {
     marginTop: 12,
-    height: '90%'
+    height: '75%'
   },
   genreList: {
     alignItems: 'center',
     paddingTop: 24,
-    paddingBottom: 128
-  },
-  nextButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 24,
-    paddingRight: 24,
-    marginTop: 32,
-    marginBottom: 10,
-    borderRadius: 50,
-    borderWidth: 4,
-    borderColor: '#7ae48c',
-    backgroundColor: '#7ae48c',
-  },
-  nextText: {
-    lineHeight: 36,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    paddingBottom: 24,
   },
   gradient: {
     position: 'absolute',
@@ -164,19 +153,21 @@ const styles = StyleSheet.create({
     height: 12,
     zIndex: 999
   },
-  startButton: {
-    justifyContent: 'center',
+  nextButton: {
+    width: '50%',
     alignItems: 'center',
-    position: 'absolute',
+    marginTop: 24,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 24,
+    paddingRight: 24,
     borderRadius: 50,
-    width: 100,
-    height: 100,
     backgroundColor: '#7ae48c',
-    right: 32,
-    bottom: 4,
-    zIndex: 999,
-    shadowOffset: { width: 0, height: 2, },
-    shadowColor: 'grey',
-    shadowOpacity: 0.5,
+  },
+  nextText: {
+    lineHeight: 36,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
