@@ -1,7 +1,6 @@
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons'
 import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
-import Swipeable from 'react-native-swipeable-row';
 
 export default class Track extends React.Component {
 
@@ -10,44 +9,37 @@ export default class Track extends React.Component {
     if (playlistId) {
       this.props.deleteTrack(playlistId, item.uri, item.preview_url);
     } else {
-
+      this.props.deleteTrack(item.key, item.preview_url);
     }
   }
 
   render() {
     const { item, trackPlaying } = this.props;
-    console.log(`${trackPlaying} render`);
     return (
       <View>
         <View style={styles.divider} />
-        <Swipeable
-          rightButtons={[
-            <TouchableOpacity style={{ justifyContent: 'center', height: 72 }} onPress={this.deleteTrack}>
-              <AntDesign name='close' size={32} style={{ color: 'red' }} />
-            </TouchableOpacity>,
-          ]}
-          rightButtonWidth={32}
-        >
-          <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview_url)}>
-            <View style={styles.track}>
-              <View style={styles.trackArtWrapper}>
-                <Image style={styles.trackArt} source={{ uri: item.artwork[item.artwork.length - 1] }} />
-              </View>
-              <Text
-                numberOfLines={1}
-                style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
-              >
-                {item.name}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
-              >
-                {item.artists.join(', ')} - {item.album}
-              </Text>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => this.props.previewTrack(item.preview_url)}>
+          <View style={styles.track}>
+            <View style={styles.trackArtWrapper}>
+              <Image style={styles.trackArt} source={{ uri: item.artwork[item.artwork.length - 1] }} />
             </View>
-          </TouchableOpacity>
-        </Swipeable>
+            <Text
+              numberOfLines={1}
+              style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
+            >
+              {item.name}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
+            >
+              {item.artists.join(', ')} - {item.album}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={this.deleteTrack}>
+          <AntDesign name='close' size={32} style={{ color: 'red' }} />
+        </TouchableOpacity>
         {this.props.lastItem && <View style={styles.divider} />}
       </View>
     );
@@ -61,7 +53,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%'
   },
-
   track: {
     paddingLeft: 0,
     paddingRight: 0,
@@ -91,5 +82,10 @@ const styles = StyleSheet.create({
     shadowColor: 'grey',
     shadowOpacity: 1,
     shadowRadius: 0.8
+  },
+  deleteButton: {
+    position: 'absolute',
+    justifyContent: 'center',
+    height: 72
   }
 });

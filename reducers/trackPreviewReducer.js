@@ -1,4 +1,5 @@
 import { STORE_TRACKS, END_SESSION, ADD_TRACK, SKIP_TRACK } from '../actions/trackPreviewActions';
+import { DELETE_ADDED_TRACK } from '../actions/playlistPreviewActions';
 import { SIGN_OUT } from '../actions/loginActions';
 
 const initTrackPreview = {
@@ -30,7 +31,7 @@ export default function reducer(state = initTrackPreview, action) {
           ...state.seen,
           [trackId]: "ADD"
         },
-        added: [...state.added, { ...state.session[trackId], key: trackId }]
+        added: [...state.added, { key: trackId, ...state.session[trackId] }]
       };
     case SKIP_TRACK:
       return {
@@ -40,6 +41,11 @@ export default function reducer(state = initTrackPreview, action) {
           ...state.seen,
           [trackId]: "SKIP"
         }
+      };
+    case DELETE_ADDED_TRACK:
+      return {
+        ...state,
+        added: [ ...state.added ].filter(track => track.key != action.key)
       };
     case END_SESSION:
     case SIGN_OUT:

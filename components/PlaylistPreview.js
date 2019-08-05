@@ -41,6 +41,21 @@ export default class PlaylistPreview extends React.Component {
     };
   };
 
+  deleteTrack = (key, preview_url) => {
+    const count = this.props.added.length - 1;
+    if (this.state.trackPlaying == preview_url) {
+      soundObject.unloadAsync();
+    }
+    this.props.navigation.setParams({title: `${count} ${count > 1 ? 'Songs' : 'Song'} Added`});
+    this.props.deleteAddedTrack(key);
+  }
+
+  _onPlaybackStatusUpdate = playbackStatus => {
+    if (playbackStatus.didJustFinish) {
+      this.setState({ trackPlaying: null });
+    }
+  };
+
   previewTrack = async preview_url => {
     if (!preview_url) {
       alert("No preview available.");
@@ -60,7 +75,6 @@ export default class PlaylistPreview extends React.Component {
         soundObject.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
         await soundObject.loadAsync({ uri: preview_url });
         soundObject.playAsync();
-        console.log(`setting state to ${preview_url}`);
         this.setState({ trackPlaying: preview_url })
       } else {
         this.setState({ trackPlaying: null })
@@ -71,23 +85,22 @@ export default class PlaylistPreview extends React.Component {
   }
 
   render() {
-    const tracks = this.props.navigation.getParam('added');
-    console.log(this.state.trackPlaying);
     return (
       <View style={styles.container}>
         <View style={styles.playlistContainer}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           <FlatList
-            data={tracks}
+            data={this.props.added}
             contentContainerStyle={styles.playlists}
             showsVerticalScrollIndicator={false}
+            extraData={this.state}
             renderItem={({ item, index }) => (
               <Track
                 item={item}
                 trackPlaying={this.state.trackPlaying}
                 deleteTrack={this.deleteTrack}
                 previewTrack={this.previewTrack}
-                lastItem={index == tracks.length - 1}
+                lastItem={index == this.props.added.length - 1}
               >
               </Track>
             )}
@@ -95,6 +108,14 @@ export default class PlaylistPreview extends React.Component {
           </FlatList>
           <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
+        <TouchableOpacity
+          style={styles.exportButton}
+          onPress={() => alert('export')}
+        >
+          <Text style={styles.exportText}>
+            EXPORT TO SPOTIFY
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -115,7 +136,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   playlistContainer: {
-    height: '80%',
+    height: '75%',
     width: '80%',
   },
   gradientTop: {
@@ -134,15 +155,19 @@ const styles = StyleSheet.create({
     height: 12,
     zIndex: 999
   },
-  artworkContainer: {
-    shadowOffset: { width: 0, height: 2, },
-    shadowColor: 'grey',
-    shadowOpacity: 1.0,
-    marginTop: 16,
-    marginBottom: 24
+  exportButton: {
+    marginTop: 24,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 24,
+    paddingRight: 24,
+    borderRadius: 50,
+    backgroundColor: '#7ae48c',
   },
-  artwork: {
-    width: Dimensions.get('window').width / 2,
-    height: Dimensions.get('window').width / 2
-  }
+  exportText: {
+    lineHeight: 36,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
 });

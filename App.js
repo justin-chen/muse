@@ -20,8 +20,10 @@ import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
 GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
+
 const persistConfig = {
-  key: 'root57',
+  key: 'root59',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
