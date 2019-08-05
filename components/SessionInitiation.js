@@ -8,6 +8,7 @@ export default class SessionInitiation extends React.Component {
     super(props);
     this.state = {
       fetchingTracks: false,
+      syncingNewUser: false,
     };
   }
 
@@ -36,17 +37,63 @@ export default class SessionInitiation extends React.Component {
     this.props.navigation.navigate('GenreSelect', { header: 'Categories' });
   }
 
+  isUserNew = async (access_token, refresh_token) => {
+    let is_new_user = await this.props.isNewUser(access_token, refresh_token);
+    return is_new_user;
+  }
+
+  fetchArtistsFromNewUser = async (access_token, refresh_token) => {
+    let fetchedArtistIds = [];
+    let topArtistIds = await this.props.fetchTopArtists(access_token, refresh_token);
+    let followedArtistIds = await this.props.fetchFollowedArtists(access_token, refresh_token);
+    let libraryArtistIds = await this.props.fetchArtistsFromUserLibrary(access_token, refresh_token, this.props.user.profile.country);
+
+    return fetchedArtistIds.concat(topArtistIds, followedArtistIds, libraryArtistIds);
+  }
+
+  updateUserSeeds = async (access_token, refresh_token, artist_ids) => {
+    let updated = await this.props.updateUserSeeds(access_token, refresh_token, artist_ids);
+    if (updated) {
+      await this.props.syncedNewUser(access_token, refresh_token);
+    } else {
+      // did not update user seeds
+    }
+  }
+
   startPersonalizedMuseSession = async () => {
     const { access_token, refresh_token } = this.props.auth;
+
+    // If user is a new user, perform user syncing
+    let new_user = await this.isUserNew(access_token, refresh_token);
+    if (new_user) {
+      this.setState({ syncingNewUser: true });
+      let fetchedArtistIds = await this.fetchArtistsFromNewUser(access_token, refresh_token);
+      await this.updateUserSeeds(access_token, refresh_token, fetchedArtistIds);
+      this.setState({ syncingNewUser: false }); 
+    }
+
     this.setState({ fetchingTracks: true });
     await this.props.fetchPersonalizedTracks(access_token, refresh_token);
     this.setState({ fetchingTracks: false });
-    this.props.navigation.navigate('TrackPreview');
+
+    this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
   }
 
   render() {
     return (
       <Animated.View style={[{ ...this.props.style }, styles.container]}>
+        <AnimatedLoader
+          visible={this.state.syncingNewUser}
+          overlayColor='#fff'
+          animationStyle={styles.lottie}
+          speed={1.5}
+          source={require('../assets/loading.json')}
+        >
+          <View style={styles.newUserSyncText}>
+            <Text style={styles.infoText}>We're gathering your song preferences based on your listening history on Spotify. This may take a little while...</Text>
+          </View>
+        </AnimatedLoader>
+
         <AnimatedLoader
           visible={this.state.fetchingTracks}
           overlayColor='#fff'

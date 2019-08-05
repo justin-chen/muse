@@ -135,10 +135,15 @@ export default class Home extends React.Component {
     if (sessionCount <= 1) {
       const { access_token, refresh_token } = this.props.auth;
       const { genres } = this.props;
-      this.props.fetchTracks(access_token, refresh_token, genres);
+
+      if (this.props.navigation.getParam('personalized')) {
+        this.props.fetchPersonalizedTracks(access_token, refresh_token);
+      } else if (this.props.navigation.getParam('categories')) {
+        this.props.fetchTracks(access_token, refresh_token, genres);
+      }
+      
     }
   }
-
 
   render() {
     const track = this.state.currentTrackInfo;
