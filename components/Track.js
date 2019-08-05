@@ -14,7 +14,7 @@ export default class Track extends React.Component {
   }
 
   render() {
-    const { item, trackPlaying } = this.props;
+    const { item, trackPlaying, readOnly } = this.props;
     return (
       <View>
         <View style={styles.divider} />
@@ -25,21 +25,23 @@ export default class Track extends React.Component {
             </View>
             <Text
               numberOfLines={1}
-              style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackName, { color: '#7ae48c' }] : styles.trackName}
+              style={[styles.trackName, { color: trackPlaying == item.preview_url && item.preview_url ? '#7ae48c' : 'black', width: readOnly || readOnly == undefined ? 'auto' : 190 }]}
             >
               {item.name}
             </Text>
             <Text
               numberOfLines={1}
-              style={trackPlaying == item.preview_url && item.preview_url ? [styles.trackArtists, { color: '#7ae48c' }] : styles.trackArtists}
+              style={[styles.trackArtists, { color: trackPlaying == item.preview_url && item.preview_url ? '#7ae48c' : 'black', width: readOnly || readOnly == undefined ? 'auto' : 190 }]}
             >
               {item.artists.join(', ')} - {item.album}
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton} onPress={this.deleteTrack}>
-          <AntDesign name='close' size={32} style={{ color: 'red' }} />
-        </TouchableOpacity>
+        {readOnly === false &&
+          <TouchableOpacity style={styles.deleteButton} onPress={this.deleteTrack}>
+            <AntDesign name='close' size={24} style={{ color: 'rgba(128,128,128,0.3)' }} />
+          </TouchableOpacity>
+        }
         {this.props.lastItem && <View style={styles.divider} />}
       </View>
     );
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     position: 'absolute',
     marginLeft: 64,
-    marginTop: 39
+    marginTop: 39,
   },
   trackArt: {
     height: 48,
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     position: 'absolute',
+    right: 8,
     justifyContent: 'center',
-    height: 72
+    height: 74
   }
 });

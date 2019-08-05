@@ -19,7 +19,7 @@ import PlaylistPreview from './containers/PlaylistPreviewContainer';
 import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
 
-GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
+// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 const persistConfig = {
   key: 'root59',

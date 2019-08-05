@@ -2,7 +2,7 @@ import React from 'react';
 import { Audio } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo';
-import { StyleSheet, Image, TouchableOpacity, View, FlatList, Dimensions, RefreshControl } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View, FlatList, Dimensions, RefreshControl } from 'react-native';
 import AnimatedLoader from 'react-native-animated-loader';
 import Track from './Track';
 
@@ -15,6 +15,10 @@ export default class PlaylistTracks extends React.Component {
       trackPlaying: false,
       refreshing: false,
     };
+    this.props.navigation.setParams({
+      readOnly: true,
+      enableDelete: this.enableDelete
+    });
   }
 
   componentWillUnmount() {
@@ -38,8 +42,23 @@ export default class PlaylistTracks extends React.Component {
           <MaterialCommunityIcons name='home-outline' size={30} />
         </TouchableOpacity>
       ),
+      headerRight: (
+        <TouchableOpacity
+          onPress={params.enableDelete}
+          style={{ marginRight: 18 }}
+        >
+         <Text style={{fontSize: 18}}>{params.readOnly || params.readOnly == undefined ? 'Edit' : 'Done'}</Text>
+        </TouchableOpacity>
+      )
     };
   };
+
+  enableDelete = () => {
+    const state = this.props.navigation.getParam('readOnly');
+    this.props.navigation.setParams({
+      readOnly: !state,
+    });
+  }
 
   _onRefresh = async () => {
     const { access_token, refresh_token } = this.props.auth;
@@ -128,6 +147,7 @@ export default class PlaylistTracks extends React.Component {
                 playlistId={playlistId}
                 deleteTrack={this.deleteTrack}
                 previewTrack={this.previewTrack}
+                readOnly={this.props.navigation.getParam('readOnly')}
                 lastItem={index == this.props.tracks.length - 1}
               >
               </Track>
