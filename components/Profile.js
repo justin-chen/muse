@@ -97,6 +97,8 @@ const styles = StyleSheet.create({
     width: '75%'
   },
   signOutButton: {
+    width: '50%',
+    alignItems: 'center',
     marginTop: 24,
     paddingTop: 16,
     paddingBottom: 16,

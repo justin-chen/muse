@@ -56,6 +56,10 @@ export default class Home extends React.Component {
   )
 
   fetchPlaylistTracks = async params => {
+    if (!params.count) {
+      alert('No songs in playlist.');
+      return;
+    }
     const { access_token, refresh_token } = this.props.auth;
     await this.props.fetchPlaylistTracks(access_token, refresh_token, params);
     this.props.navigation.navigate('PlaylistTracks', params);

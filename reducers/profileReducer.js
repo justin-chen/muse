@@ -16,14 +16,14 @@ export default function reducer(state = initProfile, action) {
       };
     case STORE_PLAYLISTS:
       const playlists = action.playlists
-        .filter(playlist => (playlist.owner.id === action.userId && playlist.tracks.total))
+        .filter(playlist => playlist.owner.id === action.userId)
         .map(playlist => {
           return {
             key: playlist.id,
             name: playlist.name,
             tracksUrl: playlist.tracks.href,
             trackCount: playlist.tracks.total,
-            thumbnail: playlist.images[0].url
+            thumbnail: playlist.images[0] ? playlist.images[0].url : 'https://via.placeholder.com/650/8BE79A/ffffff?text=Muse'
           };
         });
       return {

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   genresContainer: {
     marginTop: 12,
-    height: '75%'
+    height: '80%'
   },
   genreList: {
     alignItems: 'center',
@@ -154,9 +154,11 @@ const styles = StyleSheet.create({
     zIndex: 999
   },
   nextButton: {
+    position: 'absolute',
+    bottom: 48,
     width: '50%',
     alignItems: 'center',
-    marginTop: 24,
+    // marginTop: 24,
     paddingTop: 16,
     paddingBottom: 16,
     paddingLeft: 24,

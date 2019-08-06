@@ -62,12 +62,12 @@ export default class PlaylistTracks extends React.Component {
 
   _onRefresh = async () => {
     const { access_token, refresh_token } = this.props.auth;
-    this.setState({ fetchingPlaylistTracks: true });
+    this.setState({ refreshing: true });
     await this.props.fetchPlaylistTracks(access_token, refresh_token, {
       url: this.props.navigation.getParam('url'),
       index: this.props.navigation.getParam('index')
     });
-    this.setState({ fetchingPlaylistTracks: false })
+    this.setState({ refreshing: false })
   }
 
   renderRefreshControl = () => (

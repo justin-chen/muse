@@ -1,9 +1,8 @@
 import React from 'react';
 import { Audio } from 'expo';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo';
-import { StyleSheet, Image, TouchableOpacity, View, FlatList, Dimensions, Text } from 'react-native';
-import AnimatedLoader from 'react-native-animated-loader';
+import { StyleSheet, TouchableOpacity, View, FlatList, Text } from 'react-native';
 import Track from './Track';
 
 const soundObject = new Audio.Sound();
@@ -13,7 +12,12 @@ export default class PlaylistPreview extends React.Component {
     super(props);
     this.state = {
       trackPlaying: false,
+      readOnly: true,
     };
+    this.props.navigation.setParams({
+      readOnly: true,
+      enableDelete: this.enableDelete
+    });
   }
 
   componentWillUnmount() {
@@ -23,7 +27,7 @@ export default class PlaylistPreview extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: `${params.added.length} ${params.added.length > 1 ? 'Songs' : 'Song'} Added`,
+      title: 'Song Pool',
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -38,16 +42,36 @@ export default class PlaylistPreview extends React.Component {
           <Ionicons name='ios-arrow-back' size={32} />
         </TouchableOpacity>
       ),
+      headerRight: (
+        <TouchableOpacity
+          onPress={params.enableDelete}
+          style={{ marginRight: 18 }}
+        >
+         <Text style={{fontSize: 18}}>{params.readOnly || params.readOnly == undefined ? 'Edit' : 'Done'}</Text>
+        </TouchableOpacity>
+      )
     };
   };
+
+  enableDelete = () => {
+    const state = this.props.navigation.getParam('readOnly');
+    this.setState({ readOnly: !state });
+    this.props.navigation.setParams({
+      readOnly: !state,
+    });
+  }
 
   deleteTrack = (key, preview_url) => {
     const count = this.props.added.length - 1;
     if (this.state.trackPlaying == preview_url) {
       soundObject.unloadAsync();
     }
-    this.props.navigation.setParams({title: `${count} ${count > 1 ? 'Songs' : 'Song'} Added`});
     this.props.deleteAddedTrack(key);
+    if (count == 0) {
+      this.props.navigation.navigate('TrackPreview');
+    } else {
+      this.props.navigation.setParams({added: count});
+    }
   }
 
   _onPlaybackStatusUpdate = playbackStatus => {
@@ -85,6 +109,7 @@ export default class PlaylistPreview extends React.Component {
   }
 
   render() {
+    const addedCount = this.props.navigation.getParam('added');
     return (
       <View style={styles.container}>
         <View style={styles.playlistContainer}>
@@ -100,6 +125,7 @@ export default class PlaylistPreview extends React.Component {
                 trackPlaying={this.state.trackPlaying}
                 deleteTrack={this.deleteTrack}
                 previewTrack={this.previewTrack}
+                readOnly={this.props.navigation.getParam('readOnly')}
                 lastItem={index == this.props.added.length - 1}
               >
               </Track>
@@ -110,10 +136,13 @@ export default class PlaylistPreview extends React.Component {
         </View>
         <TouchableOpacity
           style={styles.exportButton}
-          onPress={() => alert('export')}
+          onPress={() => {
+            soundObject.unloadAsync();
+            this.props.navigation.navigate('PlaylistExport');
+          }}
         >
           <Text style={styles.exportText}>
-            EXPORT TO SPOTIFY
+            {`EXPORT ${addedCount} ${addedCount > 1 ? 'SONGS' : 'SONG'}`}
           </Text>
         </TouchableOpacity>
       </View>
@@ -136,7 +165,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   playlistContainer: {
-    height: '75%',
+    height: '80%',
     width: '80%',
   },
   gradientTop: {
@@ -156,7 +185,8 @@ const styles = StyleSheet.create({
     zIndex: 999
   },
   exportButton: {
-    marginTop: 24,
+    position: 'absolute',
+    bottom: 48,
     paddingTop: 16,
     paddingBottom: 16,
     paddingLeft: 24,

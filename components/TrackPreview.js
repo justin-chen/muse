@@ -4,6 +4,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import { NavigationEvents } from 'react-navigation';
 import { MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
+import Modal from 'react-native-modal';
 
 const PLACEHOLDER = 'https://via.placeholder.com/650/8BE79A/ffffff?text=Muse';
 const soundObject = new Audio.Sound();
@@ -15,35 +16,24 @@ export default class Home extends React.Component {
       currentTrackId: null,
       currentTrackInfo: {},
       sessionCount: 0,
+      showHomeModal: false,
     };
   }
 
   static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+    const { params = { header: '' } } = navigation.state;
     return {
-      title: 'Discover',
+      title: params.header,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
       headerTransparent: true,
       headerLeft: (
         <TouchableOpacity
-          onPress={async () => {
-            params.goHome();
-            soundObject.unloadAsync();
-            navigation.navigate('Home');
-          }}
+          onPress={params.goHome}
           style={{ paddingLeft: 12, width: 64 }}
         >
           <MaterialCommunityIcons name='home-outline' size={30} />
-        </TouchableOpacity>
-      ),
-      headerRight: (
-        <TouchableOpacity
-          onPress={params.goPreview}
-          style={{ paddingLeft: 16, width: 64 }}
-        >
-          <MaterialCommunityIcons name='playlist-check' size={32} />
         </TouchableOpacity>
       ),
       gesturesEnabled: false,
@@ -55,7 +45,7 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ goHome: this.props.endSession, goPreview: this.goPreview });
+    this.props.navigation.setParams({ goHome: this.goHomePrompt, goPreview: this.goPreview });
     this.setState({ sessionCount: Object.keys(this.props.tracks).length });
     Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
@@ -80,12 +70,27 @@ export default class Home extends React.Component {
     }
   }
 
+  goHomePrompt = () => {
+    if (this.props.added.length) {
+      this.setState({ showHomeModal: true });
+    } else {
+      this.goHome();
+    }
+  }
+
+  goHome = () => {
+    this.setState({ showHomeModal: false });
+    this.props.endSession();
+    soundObject.unloadAsync();
+    this.props.navigation.navigate('Home');
+  }
+
   goPreview = () => {
     if (!this.props.added.length) {
       alert('No songs added to playlist builder.');
     } else {
       soundObject.stopAsync();
-      this.props.navigation.navigate('PlaylistPreview', { added: this.props.added });
+      this.props.navigation.navigate('PlaylistPreview', { added: this.props.added.length });
     }
   }
 
@@ -113,6 +118,8 @@ export default class Home extends React.Component {
 
   resumeTrack = async () => {
     const status = await soundObject.getStatusAsync();
+    const addedCount = this.props.added.length;
+    this.props.navigation.setParams({ header: addedCount ? `${addedCount.toString(10)} ${addedCount == 1 ? 'Song' : 'Songs'} Added` : '' });
     try {
       if (status.isLoaded && !status.isPlaying) {
         await soundObject.setIsLoopingAsync(true);
@@ -125,9 +132,12 @@ export default class Home extends React.Component {
 
   nextTrack = add => {
     const { currentTrackId, sessionCount, lastClicked } = this.state;
+
     if (lastClicked && (new Date().getTime() - lastClicked < 1000)) return;
     this.setState({ sessionCount: sessionCount - 1, lastClicked: new Date().getTime() });
     if (add) {
+      const addedCount = this.props.added.length;
+      this.props.navigation.setParams({ header: `${(addedCount + 1).toString(10)} ${(addedCount + 1) == 1 ? 'Song' : 'Songs'} Added` });
       this.props.addTrack(currentTrackId);
     } else {
       this.props.skipTrack(currentTrackId);
@@ -141,15 +151,28 @@ export default class Home extends React.Component {
       } else if (this.props.navigation.getParam('categories')) {
         this.props.fetchTracks(access_token, refresh_token, genres);
       }
-      
+
     }
   }
 
   render() {
     const track = this.state.currentTrackInfo;
-    const count = this.props.added.length;
     return (
       <ImageBackground style={styles.backgroundArtwork} source={{ uri: track.artwork ? track.artwork[0] : PLACEHOLDER }} blurRadius={12}>
+        <Modal style={{ alignItems: 'center' }} isVisible={this.state.showHomeModal}>
+          <View style={styles.modal}>
+            <Text style={{ fontWeight: 'bold', marginBottom: 24, fontSize: 18 }}>Go home?</Text>
+            <Text style={{ marginBottom: 24 }}>Your selections will be discarded.</Text>
+            <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-evenly' }}>
+              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#EB4F64', backgroundColor: '#EB4F64' }]} activeOpacity={0.7} onPress={this.goHome}>
+                <Text style={styles.ctaText}>CONTINUE</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#7ae48c', backgroundColor: '#7ae48c' }]} activeOpacity={0.7} onPress={() => this.setState({ showHomeModal: false })}>
+                <Text style={styles.ctaText}>CANCEL</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <NavigationEvents
           onWillFocus={this.resumeTrack}
         />
@@ -163,10 +186,9 @@ export default class Home extends React.Component {
             }}
           >
             <View style={styles.artworkContainer}>
-              <Image style={styles.artwork} source={{ uri:  track.artwork ? track.artwork[0] : PLACEHOLDER }} />
+              <Image style={styles.artwork} source={{ uri: track.artwork ? track.artwork[0] : PLACEHOLDER }} />
             </View>
           </GestureRecognizer>
-          <Text style={styles.progress}>{count.toString(10)}{count == 1 ? ' song ' : ' songs '}added to playlist</Text>
           <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-evenly' }}>
             <TouchableOpacity style={[styles.button, { borderWidth: 2, borderColor: '#EB4F64', backgroundColor: '#EB4F64' }]} activeOpacity={0.7} onPress={() => this.nextTrack(false)}>
               <AntDesign name='close' size={50} style={[styles.icon, { color: 'white', bottom: 8 }]} />
@@ -175,6 +197,14 @@ export default class Home extends React.Component {
               <Ionicons name='md-heart' size={50} style={[styles.icon, { color: 'white', bottom: 6 }]} />
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={styles.exportButton}
+            onPress={this.goPreview}
+          >
+            <Text style={styles.exportText}>
+              FINISH AND EXPORT
+          </Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     );
@@ -210,6 +240,23 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     flex: 1,
   },
+  ctaText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  ctaButton: {
+    padding: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    width: '40%',
+    zIndex: 999,
+    backgroundColor: 'rgba(255,255,255, 0.9)',
+    shadowOffset: { width: 0, height: 2, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.3,
+  },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -222,4 +269,29 @@ const styles = StyleSheet.create({
     shadowColor: 'grey',
     shadowOpacity: 0.3,
   },
+  exportButton: {
+    position: 'absolute',
+    bottom: 48,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 24,
+    paddingRight: 24,
+    borderRadius: 50,
+    backgroundColor: '#7ae48c',
+  },
+  exportText: {
+    lineHeight: 36,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  modal: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    width: '90%', borderRadius: 30,
+    paddingTop: 24,
+    paddingBottom: 24,
+    paddingLeft: 24,
+    paddingRight: 24
+  }
 });

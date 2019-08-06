@@ -16,13 +16,14 @@ import Profile from './containers/ProfileContainer';
 import PlaylistTracks from './containers/PlaylistTracksContainer';
 import TrackPreview from './containers/TrackPreviewContainer';
 import PlaylistPreview from './containers/PlaylistPreviewContainer';
+import PlaylistExport from './containers/PlaylistExportContainer';
 import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
 
-// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 const persistConfig = {
-  key: 'root59',
+  key: 'root60',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
@@ -37,7 +38,8 @@ const AppStack = createStackNavigator({
   PlaylistTracks,
   SessionInitiation,
   TrackPreview,
-  PlaylistPreview
+  PlaylistPreview,
+  PlaylistExport
 });
 const AuthStack = createStackNavigator({
   Login,

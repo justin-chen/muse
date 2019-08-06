@@ -22,7 +22,9 @@ const fetchAPI = async (url, options, dispatch, refreshToken, n = 5) => {
       options.headers.Authorization = `Bearer ${accessToken}`;
       if (options.body) {
         const body = JSON.parse(options.body);
-        body.access_token = accessToken;
+        if (url.includes('lets-get-this-bread')) {
+          body.access_token = accessToken;
+        }
         options.body = JSON.stringify(body);
       }
       dispatch(authenticateUserSuccess(accessToken, refreshToken));

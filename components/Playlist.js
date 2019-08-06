@@ -6,6 +6,7 @@ export default class Playlist extends React.Component {
     this.props.press({
       index: this.props.index,
       name: this.props.name,
+      count: this.props.count,
       thumbnail: this.props.thumbnail,
       url: this.props.url + `?market=${this.props.user.profile.country}`,
       playlistId: this.props.playlistId
