@@ -16,6 +16,7 @@ export default class SessionInitiation extends React.Component {
     return ({
       headerStyle: {
         borderBottomWidth: 0,
+        height: 59,
       },
       headerLeft: (
         <TouchableOpacity
@@ -102,8 +103,8 @@ export default class SessionInitiation extends React.Component {
           <View style={styles.bigBreak} />
 
           <TouchableOpacity style={styles.customButton} activeOpacity={0.9} onPress={this.startCategorizedMuseSession}>
-            <Text style={styles.buttonTitleText}>Customize My Search</Text>
-            <Text style={styles.buttonInfoText}>Pick from the provided categories and we'll find you songs that fit your mood</Text>
+            <Text style={styles.buttonTitleText}>Pick My Own Categories</Text>
+            <Text style={styles.buttonInfoText}>Songs are chosen based on the music categories that you pick</Text>
           </TouchableOpacity>
 
           <View style={styles.break} />

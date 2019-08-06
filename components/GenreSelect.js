@@ -27,7 +27,13 @@ export default class GenreSelect extends React.Component {
     return ({
       title: params.header,
       headerStyle: {
-        borderBottomWidth: 0,
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerLeft: (
         <TouchableOpacity
@@ -82,8 +88,8 @@ export default class GenreSelect extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.genresContainer}>
+      <View>
+        <View style={styles.container}>
           <AnimatedLoader
             visible={this.state.fetchingTracks}
             overlayColor='#fff'
@@ -91,7 +97,6 @@ export default class GenreSelect extends React.Component {
             speed={1.5}
             source={require('../assets/loading.json')}
           />
-          <LinearGradient colors={['white', '#ffffff00']} style={styles.gradient} />
           <FlatList
             data={genres}
             contentContainerStyle={styles.genreList}
@@ -103,11 +108,12 @@ export default class GenreSelect extends React.Component {
               )
             }}>
           </FlatList>
-          <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
-        <TouchableOpacity style={styles.nextButton} activeOpacity={0.95} onPress={this.startMuseSession}>
-          <Text style={styles.nextText}>NEXT</Text>
-        </TouchableOpacity>
+        <View style={styles.nextButtonContainer}>
+          <TouchableOpacity style={styles.nextButton} activeOpacity={0.95} onPress={this.startMuseSession}>
+            <Text style={styles.nextText}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
     );
@@ -119,57 +125,38 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240
   },
-  titleText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  nextButtonContainer: {
+    height: '15%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
   },
   container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  genresContainer: {
-    marginTop: 12,
-    height: '80%'
+    height: '85%',
   },
   genreList: {
     alignItems: 'center',
     paddingTop: 24,
-    paddingBottom: 24,
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: 12,
-    zIndex: 999
-  },
-  gradientBottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 12,
-    zIndex: 999
-  },
-  nextButton: {
-    position: 'absolute',
-    bottom: 48,
-    width: '50%',
-    alignItems: 'center',
-    // marginTop: 24,
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 24,
-    paddingRight: 24,
-    borderRadius: 50,
-    backgroundColor: '#7ae48c',
+    paddingBottom: 128
   },
   nextText: {
-    lineHeight: 36,
-    fontSize: 16,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 17,
     fontWeight: 'bold',
-    color: '#fff',
+  },
+  nextButton: {
+    zIndex: 999,
+    shadowOffset: { width: 0, height: 2, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#7ae48c',
+    borderRadius: 40,
+    color: 'white',
+    padding: 14,
+    width: 227,
+    height: 53,
   },
 });

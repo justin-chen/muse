@@ -18,9 +18,15 @@ export default class Home extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Playlists',
+      title: 'Home',
+      headerStyle: {
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerRight: (
         <TouchableOpacity
@@ -81,7 +87,6 @@ export default class Home extends React.Component {
           source={require('../assets/loading.json')}
         />
         <View style={styles.playlistContainer}>
-          <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           {this.props.playlists.length ?
             <FlatList
               data={this.props.playlists}
@@ -114,9 +119,8 @@ export default class Home extends React.Component {
               <Text style={styles.infoText}>Start by tapping the {<MaterialCommunityIcons name='play' size={14} />} button.</Text>
             </ScrollView>
           }
-          <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
           <TouchableOpacity style={styles.startButton} activeOpacity={0.95} onPress={() => { this.props.navigation.navigate('SessionInitiation') }}>
-            <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff' }} />
+            <MaterialCommunityIcons name='play' size={64} style={{ color: '#fff', paddingTop: 7 }} />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -144,36 +148,19 @@ const styles = StyleSheet.create({
     marginBottom: 40
   },
   playlists: {
-    paddingTop: 12,
+    paddingTop: 16,
     paddingBottom: 128,
     alignItems: 'center'
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 24,
   },
   playlistContainer: {
-    height: '90%',
-    width: '90%',
+    height: '100%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  gradientTop: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: 12,
-    zIndex: 999
-  },
-  gradientBottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 12,
-    zIndex: 999
   },
   startButton: {
     justifyContent: 'center',
@@ -183,11 +170,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: '#7ae48c',
-    right: 14,
-    bottom: 8,
+    right: 18,
+    bottom: 30,
     zIndex: 999,
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.8,
   },
 });

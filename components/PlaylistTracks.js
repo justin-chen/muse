@@ -29,8 +29,14 @@ export default class PlaylistTracks extends React.Component {
     const { params = {} } = navigation.state;
     return {
       title: params.name,
+      headerStyle: {
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerLeft: (
         <TouchableOpacity
@@ -139,7 +145,6 @@ export default class PlaylistTracks extends React.Component {
         />
      
         <View style={styles.playlistContainer}>
-          <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           { this.props.tracks && this.props.tracks.length &&
           <FlatList
             data={this.props.tracks}
@@ -167,7 +172,6 @@ export default class PlaylistTracks extends React.Component {
           >
           </FlatList>
           }
-          <LinearGradient colors={['#ffffff00', 'white']} style={styles.gradientBottom} />
         </View>
       </View>
     );
@@ -186,10 +190,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 24,
   },
   playlistContainer: {
-    height: '90%',
+    height: '100%',
     width: '80%',
   },
   gradientTop: {
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
     shadowOpacity: 1.0,
-    marginTop: 16,
+    marginTop: 18,
     marginBottom: 24
   },
   artwork: {

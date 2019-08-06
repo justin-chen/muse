@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingLeft: 12,
     paddingRight: 12,
-    paddingTop: 2,
+    paddingTop: 4,
     paddingBottom: 2
   },
   countText: {
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     marginBottom: 8,
-    width: Dimensions.get('window').width / 3,
-    height: Dimensions.get('window').width / 3,
+    width: Dimensions.get('window').width / 2.8,
+    height: Dimensions.get('window').width / 2.8,
     shadowOffset: { width: 0, height: 0, },
     shadowColor: 'grey',
     shadowOpacity: 1,
@@ -53,16 +53,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     borderRadius: 10,
-    marginLeft: 4,
-    marginRight: 4,
+    marginLeft: 5,
+    marginRight: 5,
     marginBottom: 8,
     paddingTop: 12,
     paddingBottom: 16,
-    width: Dimensions.get('window').width / 2.5,
-    height: Dimensions.get('window').width / 1.9,
-    shadowOffset: { width: 0, height: 0.4, },
+    width: Dimensions.get('window').width / 2.3,
+    height: Dimensions.get('window').width / 1.8,
+    shadowOffset: { width: 0, height: 0.9, },
     shadowColor: 'grey',
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.8,
     shadowRadius: 0.9
   },
   genreItem: {

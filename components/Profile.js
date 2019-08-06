@@ -6,8 +6,14 @@ export default class Profile extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Profile',
+      headerStyle: {
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerLeft: (
         <TouchableOpacity

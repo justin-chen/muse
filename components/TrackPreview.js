@@ -3,7 +3,7 @@ import { Audio } from 'expo';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { NavigationEvents } from 'react-navigation';
 import { MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons'
-import { StyleSheet, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
+import { StyleSheet, Image, Text, TouchableOpacity, View, ImageBackground, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 
 const PLACEHOLDER = 'https://via.placeholder.com/650/8BE79A/ffffff?text=Muse';
@@ -24,8 +24,13 @@ export default class Home extends React.Component {
     const { params = { header: '' } } = navigation.state;
     return {
       title: params.header,
+      headerStyle: {
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerTransparent: true,
       headerLeft: (
@@ -197,14 +202,16 @@ export default class Home extends React.Component {
               <Ionicons name='md-heart' size={50} style={[styles.icon, { color: 'white', bottom: 6 }]} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.exportButton}
-            onPress={this.goPreview}
-          >
-            <Text style={styles.exportText}>
-              FINISH AND EXPORT
-          </Text>
-          </TouchableOpacity>
+          <View style={styles.exportButtonContainer}>
+            <TouchableOpacity
+              style={styles.exportButton}
+              onPress={this.goPreview}
+            >
+              <Text style={styles.exportText}>
+                FINISH AND EXPORT
+            </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
     );
@@ -212,6 +219,12 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  exportButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 0,
+    position: 'absolute',
+  },
   progress: {
     fontWeight: 'bold',
     fontSize: 14,
@@ -223,18 +236,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255, 0.5)',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: '40%',
+    paddingTop: '35%',
   },
   artworkContainer: {
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
     shadowOpacity: 1.0,
-    marginBottom: 48
+    marginBottom: 20,
   },
   artwork: {
-    width: 300,
-    height: 300
+    width: Dimensions.get('window').width / 1.4,
+    height: Dimensions.get('window').width / 1.4,
   },
   backgroundArtwork: {
     resizeMode: 'cover',
@@ -271,7 +285,7 @@ const styles = StyleSheet.create({
   },
   exportButton: {
     position: 'absolute',
-    bottom: 48,
+    bottom: Dimensions.get('window').height / 16.5,
     paddingTop: 16,
     paddingBottom: 16,
     paddingLeft: 24,

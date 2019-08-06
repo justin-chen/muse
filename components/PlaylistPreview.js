@@ -28,8 +28,14 @@ export default class PlaylistPreview extends React.Component {
     const { params = {} } = navigation.state;
     return {
       title: 'Song Pool',
+      headerStyle: {
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerLeft: (
         <TouchableOpacity
