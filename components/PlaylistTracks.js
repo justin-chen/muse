@@ -82,11 +82,19 @@ export default class PlaylistTracks extends React.Component {
 
   deleteTrack = async (playlistId, trackUri, preview_url) => {
     const { access_token, refresh_token } = this.props.auth;
+    const trackCount = this.props.tracks.length;
     if (this.state.trackPlaying == preview_url) {
       soundObject.unloadAsync();
     }
-    await this.props.deleteTrack(access_token, refresh_token, playlistId, trackUri)
-    await this._onRefresh()
+    await this.props.deleteTrack(access_token, refresh_token, playlistId, trackUri);
+    if (!(trackCount - 1)) {
+      this.props.navigation.navigate('Home');
+    } else {
+      this.props.fetchPlaylistTracks(access_token, refresh_token, {
+        url: this.props.navigation.getParam('url'),
+        index: this.props.navigation.getParam('index')
+      });
+    }
   }
 
   previewTrack = async preview_url => {
@@ -129,9 +137,7 @@ export default class PlaylistTracks extends React.Component {
           speed={1.5}
           source={require('../assets/loading.json')}
         />
-        <View style={styles.artworkContainer}>
-          <Image style={styles.artwork} source={{ uri: thumbnail }} onLoad={() => this.setState({ artworkLoaded: true })} />
-        </View>
+     
         <View style={styles.playlistContainer}>
           <LinearGradient colors={['white', '#ffffff00']} style={styles.gradientTop} />
           { this.props.tracks && this.props.tracks.length &&
@@ -140,6 +146,12 @@ export default class PlaylistTracks extends React.Component {
             contentContainerStyle={styles.playlists}
             showsVerticalScrollIndicator={false}
             refreshControl={this.renderRefreshControl()}
+            ListHeaderComponent={
+            <View style={styles.artworkContainer}>
+              <Image style={styles.artwork} source={{ uri: thumbnail }} onLoad={() => this.setState({ artworkLoaded: true })} />
+            </View>
+            }
+            ListHeaderComponentStyle={{alignItems: 'center', marginBottom: 12}}
             renderItem={({ item, index }) => (
               <Track
                 item={item}
@@ -177,7 +189,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   playlistContainer: {
-    height: '60%',
+    height: '90%',
     width: '80%',
   },
   gradientTop: {

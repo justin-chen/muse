@@ -2,6 +2,7 @@ import React from 'react';
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
 import AnimatedLoader from 'react-native-animated-loader';
+import { NavigationEvents } from 'react-navigation';
 import { StyleSheet, Image, Text, TouchableOpacity, View, FlatList, ScrollView, Dimensions, Animated, RefreshControl } from 'react-native';
 import Playlist from './Playlist';
 
@@ -69,6 +70,9 @@ export default class Home extends React.Component {
     let { fadeAnim } = this.state;
     return (
       <Animated.View style={[{ ...this.props.style, opacity: fadeAnim, }, styles.container]}>
+        <NavigationEvents
+          onWillFocus={() => this._onRefresh(false)}
+        />
         <AnimatedLoader
           visible={this.state.fetchingTracks}
           overlayColor='#fff'
