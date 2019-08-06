@@ -7,7 +7,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react';
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
-import { composeWithDevTools } from 'redux-devtools-extension'
+// import { composeWithDevTools } from 'redux-devtools-extension'
 import AuthLoadingScreen from './containers/AuthLoadingScreenContainer';
 import Login from './containers/LoginContainer';
 import GenreSelect from './containers/GenreSelectContainer';
@@ -20,14 +20,14 @@ import PlaylistExport from './containers/PlaylistExportContainer';
 import museReducer from './reducers/museReducer';
 import SessionInitiation from './containers/SessionInitiationContainer';
 
-GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
+// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 const persistConfig = {
   key: 'root60',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, museReducer);
-const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(persistedReducer, compose(applyMiddleware(thunk)));
 const persistor = persistStore(store);
 
 
