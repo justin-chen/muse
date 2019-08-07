@@ -21,8 +21,14 @@ export default class PlaylistExport extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Add to Playlist',
+      headerStyle: {
+        backgroundColor: '#fafafa',
+        height: 59,
+      },
       headerTitleStyle: {
         fontWeight: 'bold',
+        letterSpacing: 1,
+        fontSize: 22,
       },
       headerLeft: (
         <TouchableOpacity

@@ -32,8 +32,11 @@ export default class SessionInitiation extends React.Component {
     });
   }
 
-  startCategorizedMuseSession = async () => {
+  componentDidMount() {
     this.props.endSession();
+  }
+
+  startCategorizedMuseSession = async () => {
     this.props.genreUnselectAll();
     this.props.navigation.navigate('GenreSelect', { header: 'Categories' });
   }
