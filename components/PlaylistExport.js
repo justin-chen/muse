@@ -60,8 +60,10 @@ export default class PlaylistExport extends React.Component {
     const { access_token, refresh_token } = this.props.auth;
     const { id } = this.props.user.profile;
     const tracks = this.props.added.map(track => track.spotify_uri)
+    const artists = this.props.added.map(track => track.artist_id);
     this.setState({ exporting: true });
     await this.props.addTracksToPlaylist(access_token, refresh_token, playlistId, tracks);
+    this.props.updateUserSeeds(access_token, refresh_token, artists);
     this.props.fetchPlaylists(access_token, refresh_token, id);
     this.props.endSession();
     this.setState({ exporting: false, done: true });

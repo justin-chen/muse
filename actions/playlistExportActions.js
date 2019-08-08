@@ -30,3 +30,22 @@ export const createPlaylist = (accessToken, refreshToken, userId, name) => async
   const response = await fetchAPI(url, options, dispatch, refreshToken);
   // error check?
 };
+
+export const updateUserSeeds = (accessToken, refreshToken, artistIds) => async dispatch => {
+  const data = {
+    access_token: accessToken,
+    artist_ids: artistIds,
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  const url = 'https://lets-get-this-bread.appspot.com/api/sync_user_preferences';
+  const res = await fetchAPI(url, options, dispatch, refreshToken);
+
+  return res.updated;
+}

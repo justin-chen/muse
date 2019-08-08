@@ -9,7 +9,7 @@
 const fetchAPI = async (url, options, dispatch, refreshToken, n = 5) => {
   try {
     const response = await fetch(url, options);
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return await response.json();
     }
     throw Error(response.status);
