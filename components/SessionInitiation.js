@@ -60,6 +60,11 @@ export default class SessionInitiation extends React.Component {
     return updated;
   }
 
+  hasEnoughSeedData = async (access_token, refresh_token) => {
+    let hasEnoughData = await this.props.userHasEnoughData(access_token, refresh_token);
+    return hasEnoughData;
+  }
+
   startPersonalizedMuseSession = async () => {
     const { access_token, refresh_token } = this.props.auth;
     const maxDaysBeforeSync = 1;
@@ -73,11 +78,15 @@ export default class SessionInitiation extends React.Component {
       this.setState({ syncingUser: false });
     }
 
-    this.setState({ fetchingTracks: true });
-    await this.props.fetchPersonalizedTracks(access_token, refresh_token);
-    this.setState({ fetchingTracks: false });
-
-    this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
+    let hasEnoughPersonalizedData = await this.hasEnoughSeedData(access_token, refresh_token);
+    if (hasEnoughPersonalizedData) {
+      this.setState({ fetchingTracks: true });
+      await this.props.fetchPersonalizedTracks(access_token, refresh_token);
+      this.setState({ fetchingTracks: false });
+      this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
+    } else {
+      alert("We are unable to gather enough data to generate personalized recommendations for you! Please use the category selection flow.");
+    }
   }
 
   render() {
