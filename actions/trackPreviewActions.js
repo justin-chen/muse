@@ -44,7 +44,7 @@ export const fetchTopArtists = (accessToken, refreshToken) => async dispatch => 
   }
 
   // Fetch artists from top tracks
-  url = 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=50';
+  url = 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=50'; // Should we use short term now?
   while (true) {
     const topTracks = await fetchAPI(url, options, dispatch, refreshToken);
     topArtistIds.push(...([].concat.apply([], topTracks.items.map(track => track.artists)).map(artist => artist.id)));
@@ -130,7 +130,7 @@ export const userHasEnoughData = (accessToken, refreshToken) => async dispatch =
   return res.has_enough_data;
 }
 
-export const isNewUser = (accessToken, refreshToken) => async dispatch => {
+export const lastSyncedWithSpotify = (accessToken, refreshToken) => async dispatch => {
   const options = {
     method: 'GET',
     headers: {
@@ -138,35 +138,17 @@ export const isNewUser = (accessToken, refreshToken) => async dispatch => {
     },
   };
 
-  const url = `https://lets-get-this-bread.appspot.com/api/is_new_user?access_token=${accessToken}`;
+  const url = `https://lets-get-this-bread.appspot.com/api/last_synced_with_spotify?access_token=${accessToken}`;
   const res = await fetchAPI(url, options, dispatch, refreshToken);
 
-  return res.is_new_user;
+  return res.last_synced_with_spotify;
 }
 
-export const syncedNewUser = (accessToken, refreshToken) => async dispatch => {
-  const data = {
-    access_token: accessToken,
-  };
-
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
-
-  const url = 'https://lets-get-this-bread.appspot.com/api/synced_new_user';
-  const res = await fetchAPI(url, options, dispatch, refreshToken);
-
-  return res;
-}
-
-export const updateUserSeeds = (accessToken, refreshToken, artistIds) => async dispatch => {
+export const syncUserWithSpotify = (accessToken, refreshToken, artistIds) => async dispatch => {
   const data = {
     access_token: accessToken,
     artist_ids: artistIds,
+    type: "spotify",
   }
   const options = {
     method: 'POST',

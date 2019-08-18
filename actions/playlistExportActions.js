@@ -35,6 +35,7 @@ export const updateUserSeeds = (accessToken, refreshToken, artistIds) => async d
   const data = {
     access_token: accessToken,
     artist_ids: artistIds,
+    type: "muse",
   }
   const options = {
     method: 'POST',
