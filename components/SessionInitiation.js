@@ -8,7 +8,7 @@ export default class SessionInitiation extends React.Component {
     super(props);
     this.state = {
       fetchingTracks: false,
-      syncingNewUser: false,
+      syncingUser: false,
     };
   }
 
@@ -41,12 +41,11 @@ export default class SessionInitiation extends React.Component {
     this.props.navigation.navigate('GenreSelect', { header: 'Categories' });
   }
 
-  isUserNew = async (access_token, refresh_token) => {
-    let is_new_user = await this.props.isNewUser(access_token, refresh_token);
-    return is_new_user;
+  lastSyncedWithSpotify = async (access_token, refresh_token) => {
+    return await this.props.lastSyncedWithSpotify(access_token, refresh_token);
   }
 
-  fetchArtistsFromNewUser = async (access_token, refresh_token) => {
+  fetchSpotifyArtistsFromUser = async (access_token, refresh_token) => {
     let fetchedArtistIds = [];
     let topArtistIds = await this.props.fetchTopArtists(access_token, refresh_token);
     let followedArtistIds = await this.props.fetchFollowedArtists(access_token, refresh_token);
@@ -55,39 +54,44 @@ export default class SessionInitiation extends React.Component {
     return fetchedArtistIds.concat(topArtistIds, followedArtistIds, libraryArtistIds);
   }
 
-  updateUserSeeds = async (access_token, refresh_token, artist_ids) => {
-    let updated = await this.props.updateUserSeeds(access_token, refresh_token, artist_ids);
-    if (updated) {
-      await this.props.syncedNewUser(access_token, refresh_token);
-    } else {
-      // did not update user seeds
-    }
+  syncUserWithSpotify = async (access_token, refresh_token, artist_ids) => {
+    return await this.props.syncUserWithSpotify(access_token, refresh_token, artist_ids);
+  }
+
+  hasEnoughSeedData = async (access_token, refresh_token) => {
+    return await this.props.userHasEnoughData(access_token, refresh_token);
   }
 
   startPersonalizedMuseSession = async () => {
     const { access_token, refresh_token } = this.props.auth;
+    const maxDaysBeforeSync = 1;
+    const secondsInDay = 86400;
 
-    // If user is a new user, perform user syncing
-    let new_user = await this.isUserNew(access_token, refresh_token);
-    if (new_user) {
-      this.setState({ syncingNewUser: true });
-      let fetchedArtistIds = await this.fetchArtistsFromNewUser(access_token, refresh_token);
-      await this.updateUserSeeds(access_token, refresh_token, fetchedArtistIds);
-      this.setState({ syncingNewUser: false }); 
+    let lastSynced = await this.lastSyncedWithSpotify(access_token, refresh_token);
+    let shouldSync = (Date.now() - lastSynced)/1000 >= (maxDaysBeforeSync*secondsInDay)
+    if (shouldSync) {
+      this.setState({ fetchingTracks: true });
+      let fetchedArtistIds = await this.fetchSpotifyArtistsFromUser(access_token, refresh_token);
+      await this.syncUserWithSpotify(access_token, refresh_token, fetchedArtistIds);
     }
 
-    this.setState({ fetchingTracks: true });
-    await this.props.fetchPersonalizedTracks(access_token, refresh_token);
-    this.setState({ fetchingTracks: false });
-
-    this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
+    let hasEnoughPersonalizedData = await this.hasEnoughSeedData(access_token, refresh_token);
+    if (hasEnoughPersonalizedData) {
+      if (!shouldSync) this.setState({ fetchingTracks: true });
+      await this.props.fetchPersonalizedTracks(access_token, refresh_token);
+      this.setState({ fetchingTracks: false });
+      this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
+    } else {
+      this.setState({ fetchingTracks: false });
+      alert("We are unable to gather enough data to generate personalized recommendations for you! Please use the category selection flow.");
+    }
   }
 
   render() {
     return (
       <Animated.View style={[{ ...this.props.style }, styles.container]}>
         <AnimatedLoader
-          visible={this.state.syncingNewUser}
+          visible={this.state.syncingUser}
           overlayColor='#fff'
           animationStyle={styles.lottie}
           speed={1.5}
