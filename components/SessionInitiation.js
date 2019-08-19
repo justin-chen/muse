@@ -68,20 +68,21 @@ export default class SessionInitiation extends React.Component {
     const secondsInDay = 86400;
 
     let lastSynced = await this.lastSyncedWithSpotify(access_token, refresh_token);
-    if ((Date.now() - lastSynced)/1000 >= (maxDaysBeforeSync*secondsInDay)) {
-      this.setState({ syncingUser: true });
+    let shouldSync = (Date.now() - lastSynced)/1000 >= (maxDaysBeforeSync*secondsInDay)
+    if (shouldSync) {
+      this.setState({ fetchingTracks: true });
       let fetchedArtistIds = await this.fetchSpotifyArtistsFromUser(access_token, refresh_token);
       await this.syncUserWithSpotify(access_token, refresh_token, fetchedArtistIds);
-      this.setState({ syncingUser: false });
     }
 
     let hasEnoughPersonalizedData = await this.hasEnoughSeedData(access_token, refresh_token);
     if (hasEnoughPersonalizedData) {
-      this.setState({ fetchingTracks: true });
+      if (!shouldSync) this.setState({ fetchingTracks: true });
       await this.props.fetchPersonalizedTracks(access_token, refresh_token);
       this.setState({ fetchingTracks: false });
       this.props.navigation.navigate('TrackPreview', {personalized: true, categories: false});
     } else {
+      this.setState({ fetchingTracks: false });
       alert("We are unable to gather enough data to generate personalized recommendations for you! Please use the category selection flow.");
     }
   }
