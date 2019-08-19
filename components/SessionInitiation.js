@@ -42,8 +42,7 @@ export default class SessionInitiation extends React.Component {
   }
 
   lastSyncedWithSpotify = async (access_token, refresh_token) => {
-    let lastSynced = await this.props.lastSyncedWithSpotify(access_token, refresh_token);
-    return lastSynced;
+    return await this.props.lastSyncedWithSpotify(access_token, refresh_token);
   }
 
   fetchSpotifyArtistsFromUser = async (access_token, refresh_token) => {
@@ -56,13 +55,11 @@ export default class SessionInitiation extends React.Component {
   }
 
   syncUserWithSpotify = async (access_token, refresh_token, artist_ids) => {
-    let updated = await this.props.syncUserWithSpotify(access_token, refresh_token, artist_ids);
-    return updated;
+    return await this.props.syncUserWithSpotify(access_token, refresh_token, artist_ids);
   }
 
   hasEnoughSeedData = async (access_token, refresh_token) => {
-    let hasEnoughData = await this.props.userHasEnoughData(access_token, refresh_token);
-    return hasEnoughData;
+    return await this.props.userHasEnoughData(access_token, refresh_token);
   }
 
   startPersonalizedMuseSession = async () => {
