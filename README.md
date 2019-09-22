@@ -11,6 +11,12 @@ For more info about the app and its design, check out [this page](https://amelia
 ### Playlist Preview and Editing
 ![edit](https://media.giphy.com/media/kesEcrrsNu2RoDb4K1/giphy.gif)
 
+### Music Discovery
+![preview](https://media.giphy.com/media/izb4Fiu0vQTgjMCVqm/giphy.gif)
+
+### Playlist Export
+![export](https://media.giphy.com/media/XAxyijA0W0MHSMclOQ/giphy.gif)
+
 ## About
 ### Built Using
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
