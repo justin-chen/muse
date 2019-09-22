@@ -1,26 +1,10 @@
 # Muse
-A mobile app to help simplify music discovery and Spotify playlist creation
+An app to simplify music discovery with Spotify. Build playlists using personalized recommendations and preferred genres. 
 
 
 ## App Demo
-Info and instructions for app demo
-Add pics here
 
 
-## Getting Started for Development
-
-### Install dependencies
-```
-npm, etc
-```
-
-### Running Locally
-```
-instructions go here
-i.e npm start
-
-Info on expo?
-```
 
 ### Built Using
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
