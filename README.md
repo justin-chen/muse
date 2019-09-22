@@ -2,6 +2,7 @@
 An app to simplify music discovery with Spotify.  
 Build playlists using personalized recommendations and preferred genres. 
 
+For more info about the app and its design, check out [this page](https://ameliazhao.github.io/muse.html)
 
 ## Flows
 ### OAuth 2.0  
