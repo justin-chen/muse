@@ -114,7 +114,8 @@ export default class PlaylistTracks extends React.Component {
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
       shouldDuckAndroid: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-      playThroughEarpieceAndroid: true
+      playThroughEarpieceAndroid: true,
+      staysActiveInBackground: false,
     });
     try {
       await soundObject.unloadAsync();

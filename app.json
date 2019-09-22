@@ -3,7 +3,7 @@
     "name": "Muse",
     "slug": "Muse",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
       "android"
@@ -12,7 +12,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,7 +22,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "ameliajustinjustin.com"
     }
   }
 }

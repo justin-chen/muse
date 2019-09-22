@@ -23,8 +23,9 @@ export default class Login extends React.Component {
           style={styles.loginButton}
           onPress={this.props.authenticateUser}
         >
+        <FontAwesome name='spotify' size={36} style={{color: 'white'}} />
           <Text style={styles.loginText}>
-            <FontAwesome name='spotify' size={36} />
+            
             {'   '}LOG IN WITH SPOTIFY
           </Text>
         </TouchableOpacity>
@@ -50,10 +51,11 @@ const styles = StyleSheet.create({
     marginBottom: 24
   },
   loginButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 24,
-    paddingRight: 24,
+    flexDirection:'row',
+    paddingTop: 14,
+    paddingBottom: 14,
+    paddingLeft: 20,
+    paddingRight: 20,
     marginTop: 20,
     marginBottom: 10,
     borderRadius: 50,

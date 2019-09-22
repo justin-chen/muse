@@ -97,7 +97,8 @@ export default class PlaylistPreview extends React.Component {
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
       shouldDuckAndroid: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-      playThroughEarpieceAndroid: true
+      playThroughEarpieceAndroid: true,
+      staysActiveInBackground: false,
     });
     try {
       await soundObject.unloadAsync();
@@ -193,10 +194,10 @@ const styles = StyleSheet.create({
   exportButton: {
     position: 'absolute',
     bottom: 48,
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingTop: 14,
+    paddingBottom: 14,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderRadius: 50,
     backgroundColor: '#7ae48c',
   },
