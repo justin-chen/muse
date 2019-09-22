@@ -3,11 +3,14 @@ An app to simplify music discovery with Spotify.
 Build playlists using personalized recommendations and preferred genres. 
 
 
-## App Demo
+## Flows
 ### OAuth 2.0  
 ![auth](https://media.giphy.com/media/SwTtgVrSu6woD9CaoZ/giphy.gif)
 
+### Playlist Preview and Editing
+![edit](https://media.giphy.com/media/kesEcrrsNu2RoDb4K1/giphy.gif)
 
+## About
 ### Built Using
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 - [Muse Backend](https://github.com/muse-org/muse-backend)
