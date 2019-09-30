@@ -112,6 +112,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     borderRadius: 50,
     backgroundColor: 'rgb(168,168,168)',
+    shadowOffset: { width: 0, height: 2, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.5,
   },
   signOutText: {
     lineHeight: 36,

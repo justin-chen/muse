@@ -200,6 +200,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     borderRadius: 50,
     backgroundColor: '#7ae48c',
+    shadowOffset: { width: 0, height: 2, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.5,
   },
   exportText: {
     lineHeight: 36,

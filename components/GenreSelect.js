@@ -10,7 +10,8 @@ export default class GenreSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fetchingTracks: false
+      fetchingTracks: false,
+      disableNext: true,
     }
     this.props.navigation.setParams({
       genreAll: this.genreAll,
@@ -70,9 +71,14 @@ export default class GenreSelect extends React.Component {
     const { genresSelected } = this.props;
     if (selected) {
       this.props.navigation.setParams({ header: `${genresSelected + 1} Selected`, selectAll: (genresSelected + 1) < 22 });
+      this.setState({ disableNext: false });
     } else {
       this.props.navigation.setParams({ header: genresSelected == 1 ? 'Categories' : `${genresSelected - 1} Selected`, selectAll: true });
+      if (genresSelected == 1) {
+        this.setState({ disableNext: true });
+      }
     }
+
     this.props.genreToggle(genre);
   }
 
@@ -80,9 +86,11 @@ export default class GenreSelect extends React.Component {
     if ((this.props.genresSelected) < 22) {
       this.props.genreSelectAll();
       this.props.navigation.setParams({ selectAll: false, header: '22 Selected' });
+      this.setState({ disableNext: false });
     } else {
       this.props.genreUnselectAll();
       this.props.navigation.setParams({ selectAll: true, header: 'Categories' });
+      this.setState({ disableNext: true });
     }
   }
 
@@ -110,7 +118,7 @@ export default class GenreSelect extends React.Component {
           </FlatList>
         </View>
         <View style={styles.nextButtonContainer}>
-          <TouchableOpacity style={styles.nextButton} activeOpacity={0.95} onPress={this.startMuseSession}>
+          <TouchableOpacity disabled={this.state.disableNext} style={this.state.disableNext ? styles.nextButtonDisabled : styles.nextButton} activeOpacity={0.95} onPress={this.startMuseSession}>
             <Text style={styles.nextText}>NEXT</Text>
           </TouchableOpacity>
         </View>
@@ -144,6 +152,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 17,
     fontWeight: 'bold',
+  },
+  nextButtonDisabled: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.05)',
+    color: 'white',
+    borderRadius: 40,
+    padding: 14,
+    width: 227,
+    height: 53,
   },
   nextButton: {
     zIndex: 999,
