@@ -170,11 +170,11 @@ export default class Home extends React.Component {
             <Text style={{ fontWeight: 'bold', marginBottom: 24, fontSize: 18 }}>Go home?</Text>
             <Text style={{ marginBottom: 24 }}>Your selections will be discarded.</Text>
             <View style={{ flexDirection: 'row', width: 300, justifyContent: 'space-evenly' }}>
-              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#EB4F64', backgroundColor: '#EB4F64' }]} activeOpacity={0.7} onPress={this.goHome}>
-                <Text style={styles.ctaText}>CONTINUE</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#7ae48c', backgroundColor: '#7ae48c' }]} activeOpacity={0.7} onPress={() => this.setState({ showHomeModal: false })}>
+              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#EB4F64', backgroundColor: '#EB4F64' }]} activeOpacity={0.7} onPress={() => this.setState({ showHomeModal: false })}>
                 <Text style={styles.ctaText}>CANCEL</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.ctaButton, { borderWidth: 2, borderColor: '#7ae48c', backgroundColor: '#7ae48c' }]} activeOpacity={0.7} onPress={this.goHome}>
+                <Text style={styles.ctaText}>GO HOME</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255, 0.9)',
     shadowOffset: { width: 0, height: 2, },
     shadowColor: 'grey',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.8,
   },
   exportButton: {
     position: 'absolute',
@@ -293,6 +293,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     borderRadius: 50,
     backgroundColor: '#7ae48c',
+    shadowOffset: { width: 0, height: 2, },
+    shadowColor: 'grey',
+    shadowOpacity: 0.8,
   },
   exportText: {
     lineHeight: 36,

@@ -14,8 +14,6 @@ const mapStateToProps = state => {
   }
 };
 
-
-
 const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(genreSelectActions, dispatch),
   ...bindActionCreators(trackPreviewActions, dispatch)
